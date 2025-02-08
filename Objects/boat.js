@@ -18,6 +18,7 @@ class Boat {
     player.swimming = true;
     player.x -= 50;
     player.y += 50;
+    scoobaSwimGif.play();
     this.boarded = false;
   }
   
@@ -25,6 +26,8 @@ class Boat {
     this.updatePlayerPos();
     player.swimming = false;
     player.facing = 'right';
+    scoobaSwimGif.pause();
+    scoobaSwimGif.setFrame(1);
     this.boarded = true;
   }
   
