@@ -1,16 +1,39 @@
 class Scene {
   constructor() {
-    
+    this.crates = [];
+  }
+
+  addCrate(crate) {
+    this.crates.push(crate);
+  }
+
+  initCrates() {
+    for (let i = 0; i < 10; i++)
+      spawnRandomCrate(true, GreenCrate);
+    for (let i = 0; i < 10; i++)
+      spawnRandomCrate(true, OrangeCrate);
+    for (let i = 0; i < 5; i++)
+      spawnRandomCrate(true, RedCrate);
   }
   
   init() {
     boat.board();
     player.setInView();
+    this.initCrates();
   }
 
   update(dt) {
     player.update(dt);
     boat.update(dt);
+
+    for (let i = this.crates.length - 1; i >= 0; i--) {
+      this.crates[i].update(dt);
+
+      if (this.crates[i].destroyed) {
+        spawnRandomCrate(false, this.crates[i].constructor);
+        this.crates.splice(i, 1);
+      }
+    }
   }
   
   draw() {
@@ -29,6 +52,11 @@ class Scene {
     panzoom.begin();
     boat.draw();
     player.draw();
+
+    for (let i = 0; i < this.crates.length; i++) {
+      this.crates[i].draw();
+    }
+
     panzoom.end();
 
     // Ocean

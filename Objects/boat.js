@@ -4,7 +4,7 @@ class Boat {
     this.y = y;
     this.vx = 0;
     this.s = 300;
-    this.speed = 100;
+    this.speed = 200;
     this.boarded = false;
   }
   
@@ -37,20 +37,32 @@ class Boat {
   }
   
   controls(dt) {
+    let targetSpeedX = 0;
     if (this.boarded) {
-      this.vx = 0;
-      if (keys.A) this.vx -= this.speed;
-      if (keys.D) this.vx += this.speed;
+      if (keys.A) targetSpeedX -= this.speed;
+      if (keys.D) targetSpeedX += this.speed;
     }
+    this.vx = lerp(this.vx, targetSpeedX, 0.05);
   }
   
   update(dt) {
     this.controls(dt);
     
     this.x += this.vx * dt;
-    
+    this.y += Math.sin(frameCount / 40) * 0.05;
+
     if (this.boarded) {
       this.updatePlayerPos(); 
+    }
+
+    if (this.x > 1800) {
+      this.x = 1800;
+      this.vx = 0;
+    }
+
+    if (this.x < -1800) {
+      this.x = -1800;
+      this.vx = 0;
     }
   }
   

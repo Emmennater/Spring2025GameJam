@@ -48,14 +48,41 @@ class Player extends CollisionObject {
     }
   }
   
+  updateCollisions(dt) {
+    for (let crate of scene.crates) {
+      if (this.collides(crate)) {
+        crate.destroy();
+      }
+    }
+  }
+
   update(dt) {
     this.controls(dt);
     
     this.x += this.vx * dt;
     this.y += this.vy * dt;
 
+    if (this.x > 2000) {
+      this.x = 2000;
+      this.vx = 0;
+    }
+
+    if (this.x < -2000) {
+      this.x = -2000;
+      this.vx = 0;
+    }
+
+    if (this.y > 1400) {
+      this.y = 1400;
+      this.vy = 0;
+    }
+
+    if (this.swimming) this.y = Math.max(-5, this.y);
+
     const FLIP = this.facing === 'left' ? 1 : -1;
     this.updateMesh(this.x, this.y, this.tilt * FLIP);
+
+    this.updateCollisions();
   }
   
   draw() {

@@ -6,8 +6,10 @@ class GUI {
     this.resources = new Resources(this);
     this.guiComponents.push(new Text("Money"));
     this.guiComponents.push(new Meter("Food", 0, 100));
-    this.setFood(80, true);
-    this.setMoney(100, true);
+    this.guiComponents.push(new Meter("Health", 0, 100, color(230, 110, 110)));
+    this.addFood(80, true);
+    this.addMoney(100, true);
+    this.addHealth(100, true);
   }
 
   splashText(...args) {
@@ -20,9 +22,11 @@ class GUI {
     this.splashTexts = [];
   }
 
-  setFood(food, force = false) {
-    const diff = food - this.resources.food;
-    
+  addFood(diff, force = false) {
+    const oldFood = this.resources.food;
+    this.resources.food = constrain(this.resources.food + diff, 0, 100);
+    diff = this.resources.food - oldFood;
+
     if (diff == 0 && !force) return;
     
     let comp = this.guiComponents[1];
@@ -32,13 +36,14 @@ class GUI {
       this.splashText(`${sign} ${Math.abs(diff)}`, comp.x + comp.w + 20, comp.y + comp.h / 2, 1, color(255), diff > 0);
     }
 
-    this.guiComponents[1].setValue(food);
-    this.resources.food = food;
+    this.guiComponents[1].setValue(this.resources.food);
   }
 
-  setMoney(money, force = false) {
-    const diff = money - this.resources.money;
-    
+  addMoney(diff, force = false) {
+    const oldMoney = this.resources.money;
+    this.resources.money = constrain(this.resources.money + diff, 0, Infinity);
+    diff = this.resources.money - oldMoney;
+
     if (diff == 0 && !force) return;
     
     let comp = this.guiComponents[0];
@@ -48,8 +53,25 @@ class GUI {
       this.splashText(`${sign} $${Math.abs(diff).toFixed(2)}`, comp.x + comp.w + 40, comp.y + comp.h / 2, 1, color(255), diff > 0);
     }
     
-    this.guiComponents[0].setValue(`$${money.toFixed(2)}`);
-    this.resources.money = money;
+    this.guiComponents[0].setValue(`$${this.resources.money.toFixed(2)}`);
+  }
+
+  addHealth(diff, force = false) {
+    const oldHealth = this.resources.health;
+    this.resources.health = constrain(this.resources.health + diff, 0, 100);
+    diff = this.resources.health - oldHealth;
+
+    if (diff == 0 && !force) return;
+    
+    let comp = this.guiComponents[2];
+    let sign = ['-', '', '+'][Math.sign(diff) + 1];
+    
+    if (!force) {
+      const c = diff > 0 ? color(110, 230, 110) : color(230, 110, 110);
+      this.splashText(`${sign} ${Math.abs(diff)}`, comp.x + comp.w + 20, comp.y + comp.h / 2, 1, c, diff > 0);
+    }
+    
+    this.guiComponents[2].setValue(this.resources.health);
   }
 
   update(dt) {

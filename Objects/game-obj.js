@@ -5,5 +5,10 @@ class GameObject {
     this.y = y;
     this.w = w;
     this.h = h;
+    this.destroyed = false;
+  }
+
+  destroy() {
+    this.destroyed = true;
   }
 }

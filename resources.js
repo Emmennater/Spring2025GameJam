@@ -3,15 +3,19 @@ class Resources {
   constructor(parent) {
     this.money = 0;
     this.food = 0;
+    this.health = 0;
     this.foodDepletionRate = 1;
     this.drainFood = true;
     this.parent = parent;
 
     setInterval(() => {
       if (this.drainFood) {
-        gui.setFood(Math.max(0, this.food - this.foodDepletionRate));
+        gui.addFood(-this.foodDepletionRate);
       }
-    }, 5000);
+      if (this.food == 0) {
+        gui.addHealth(-5);
+      }
+    }, 3000);
   }
 
   update(dt) {

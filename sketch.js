@@ -21,7 +21,7 @@ function setup() {
 }
 
 function draw() {
-  const DT = deltaTime / 1000;
+  const DT = Math.min(1, deltaTime / 1000);
   
   panzoom.update(DT);
   panzoom.trackPos(player.x, player.y);

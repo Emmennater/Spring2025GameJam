@@ -30,9 +30,10 @@ class CollisionObject extends GameObject {
     return this.collisionMesh.intersectsLine(x1, y1, x2, y2);
   }
 
-  updateMesh(x, y, r) {
+  updateMesh(x, y, r, scl) {
     if (x !== undefined) this.collisionMesh.setPosition(x, y);
     if (r !== undefined) this.collisionMesh.setRotation(r);
+    if (scl !== undefined) this.collisionMesh.setScale(scl);
     this.collisionMesh.updateTransform();
   }
 }
