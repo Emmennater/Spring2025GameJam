@@ -71,7 +71,8 @@ class Scene {
   
     // Draw the light gradient if the player is low enough
     if (player.y > 150) {
-      drawLightCircle(focus.x, focus.y, RADIAL_W, color(80, 100, 120), color(0));
+      const V = 0.5;
+      drawLightCircle(focus.x, focus.y, RADIAL_W, color(80*V, 100*V, 120*V), color(0));
     }
     // Restore to the default composite operation so other drawing isn’t affected.
     ctx.restore();
