@@ -54,7 +54,8 @@ class Player extends CollisionObject {
     this.x += this.vx * dt;
     this.y += this.vy * dt;
 
-    this.updateMesh(this.x, this.y, this.tilt);
+    const FLIP = this.facing === 'left' ? 1 : -1;
+    this.updateMesh(this.x, this.y, this.tilt * FLIP);
   }
   
   draw() {
@@ -68,7 +69,7 @@ class Player extends CollisionObject {
     scale(FLIP, 1);
     rotate(this.tilt);
     // rect(0, 0, this.w, this.h);
-    image(scoobaSwimGif, 0, 0, this.w, this.h);
+    image(scoobaSwimGif, 0, 0);
     pop();
 
     // Debug collision mesh
