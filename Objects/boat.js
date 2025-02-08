@@ -24,12 +24,13 @@ class Boat {
   board() {
     this.updatePlayerPos();
     player.swimming = false;
+    player.facing = 'right';
     this.boarded = true;
   }
   
   updatePlayerPos() {
     player.x = this.x - 50;
-    player.y = this.y - 59;
+    player.y = this.y - player.w / 2 - 15;
   }
   
   controls(dt) {

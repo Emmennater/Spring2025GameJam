@@ -1,5 +1,13 @@
+function preload() {
+  // fishImg = loadImage('Assets/fish.png');
+  greenCrate = loadImage('Assets/gamejam_crate_green.png');
+  orangeCrate = loadImage('Assets/gamejam_crate_orange.png');
+  redCrate = loadImage('Assets/gamejam_crate_red.png');
+  scoobaSwimGif = loadImage('Assets/scooba_swim.gif');
+}
+
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  cnv = createCanvas(windowWidth, windowHeight);
   noSmooth();
   panzoom = new PanZoom();
   scene = new Scene();
