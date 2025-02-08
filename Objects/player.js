@@ -22,7 +22,7 @@ class Player extends CollisionObject {
   }
 
   controls(dt) {
-    const CAN_SWIM_UP = this.y > -5;
+    const CAN_SWIM_UP = this.y > 0;
     
     this.vy = 0;
     this.vx = 0;
@@ -45,6 +45,13 @@ class Player extends CollisionObject {
 
     if (!this.swimming) {
       this.tilt = HALF_PI;
+    }
+
+    if (keys.W || keys.S || keys.A || keys.D) {
+      const DELAY = 10000 / Math.hypot(this.vx, this.vy);
+      scoobaSwimGif.delay(DELAY);
+    } else {
+      scoobaSwimGif.delay(200);
     }
   }
   
@@ -77,7 +84,7 @@ class Player extends CollisionObject {
       this.vy = 0;
     }
 
-    if (this.swimming) this.y = Math.max(-5, this.y);
+    if (this.swimming) this.y = Math.max(0, this.y);
 
     const FLIP = this.facing === 'left' ? 1 : -1;
     this.updateMesh(this.x, this.y, this.tilt * FLIP);
