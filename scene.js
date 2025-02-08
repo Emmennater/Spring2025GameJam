@@ -40,7 +40,7 @@ class Scene {
     const focus = panzoom.unscaleCoordinate(player.x, player.y);
     const scl = panzoom.zoom;
     const WATER_Y = panzoom.yoff * scl + height / 2;
-    const RADIAL_W = 250 * scl;
+    const RADIAL_W = 300 * scl;
   
     // Draw the sky and background
     background(80, 120, 170);
