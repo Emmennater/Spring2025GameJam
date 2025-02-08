@@ -4,6 +4,7 @@ function preload() {
   orangeCrate = loadImage('Assets/gamejam_crate_orange.png');
   redCrate = loadImage('Assets/gamejam_crate_red.png');
   scoobaSwimGif = loadImage('Assets/scooba_swim.gif');
+  walkCycleGif = loadImage('Assets/walk_cycle.gif');
 }
 
 function setup() {
@@ -24,7 +25,6 @@ function draw() {
   const DT = Math.min(1, deltaTime / 1000);
   
   panzoom.update(DT);
-  panzoom.trackPos(player.x, player.y);
   scene.update(DT);
   gui.update(DT);
   

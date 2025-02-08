@@ -52,7 +52,7 @@ class Boat {
     this.y += Math.sin(frameCount / 40) * 0.05;
 
     if (this.boarded) {
-      this.updatePlayerPos(); 
+      this.updatePlayerPos();
     }
 
     if (this.x > 1800) {

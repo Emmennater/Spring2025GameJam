@@ -51,10 +51,10 @@ class Scene {
     // Draw game objects
     panzoom.begin();
     boat.draw();
-    player.draw();
     for (let i = 0; i < this.crates.length; i++) {
       this.crates[i].draw();
     }
+    player.draw();
     panzoom.end();
   
     // Draw the ocean water
@@ -65,15 +65,29 @@ class Scene {
     // Get the canvas 2D context so we can set a blending mode
     let ctx = drawingContext;
     ctx.save();  
-    // Change the composite operation so that the gradient blends with the water.
-    // Try 'screen' (brightens), 'lighter' (adds light), or even 'overlay' to see what works best.
     ctx.globalCompositeOperation = "lighter"; 
   
-    // Draw the light gradient if the player is low enough
+    // Draw the flash light gradient if the player is low enough
     if (player.y > 150) {
       const V = 0.5;
-      drawLightCircle(focus.x, focus.y, RADIAL_W, color(80*V, 100*V, 120*V), color(0));
+      const DIR_ANGLE = player.facing == 'left' ? PI + player.tilt + 0.3 : -player.tilt - 0.3;
+      const LEN = PI/6;
+      // drawLightArc(
+      //   focus.x + (player.w / 2 + 2) * cos(DIR_ANGLE) * scl,
+      //   focus.y + (player.w / 2 + 2) * sin(DIR_ANGLE) * scl,
+      //   RADIAL_W,
+      //   DIR_ANGLE - LEN,
+      //   DIR_ANGLE + LEN,
+      //   color(80*V, 100*V, 120*V), color(0)
+      // );
+      drawLightCircle(
+        focus.x,
+        focus.y,
+        RADIAL_W,
+        color(80*V, 100*V, 120*V), color(0)
+      );
     }
+
     // Restore to the default composite operation so other drawing isn’t affected.
     ctx.restore();
   }
@@ -121,6 +135,59 @@ function drawLightCircle(x, y, size, start, stop) {
   ctx.fillRect(x - size / 2, y - size / 2, size, size);
 }
 
+function drawLightArc(x, y, size, startAngle, endAngle, start, stop) {
+  let ctx = drawingContext; // Get 2D canvas context
+  
+  // Save the current context state
+  ctx.save();
+  
+  // Create a clipping path for the arc
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.arc(x, y, size / 2, startAngle, endAngle);
+  ctx.closePath();
+  ctx.clip();
+  
+  // Create multiple color stops to approximate inverse square falloff
+  let gradient = ctx.createRadialGradient(x, y, 0, x, y, size / 2);
+  
+  // Calculate color components for interpolation
+  const startR = red(start);
+  const startG = green(start);
+  const startB = blue(start);
+  const startA = alpha(start);
+  
+  const stopR = red(stop);
+  const stopG = green(stop);
+  const stopB = blue(stop);
+  const stopA = alpha(stop);
+  
+  // Add color stops with normalized inverse square falloff
+  for (let i = 0; i <= 20; i++) {
+      const t = i / 20;
+      // Calculate inverse square falloff and normalize it to [0, 1]
+      const rawIntensity = 1 / (1 + 8 * t * t);
+      const maxIntensity = 1; // At t = 0
+      const minIntensity = 1 / (1 + 8); // At t = 1
+      // Normalize intensity to reach 0 at the edge
+      const intensity = (rawIntensity - minIntensity) / (maxIntensity - minIntensity);
+      
+      // Interpolate colors based on normalized intensity
+      const r = lerp(stopR, startR, intensity);
+      const g = lerp(stopG, startG, intensity);
+      const b = lerp(stopB, startB, intensity);
+      const a = lerp(stopA, startA, intensity);
+      
+      gradient.addColorStop(t, `rgba(${r}, ${g}, ${b}, ${a})`);
+  }
+  
+  // Set the gradient as the fill style and draw a rectangle that covers the arc
+  ctx.fillStyle = gradient;
+  ctx.fillRect(x - size / 2, y - size / 2, size, size);
+  
+  // Restore the context state
+  ctx.restore();
+}
 
 
 

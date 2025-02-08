@@ -18,7 +18,7 @@ class Player extends CollisionObject {
   }
   
   setInView() {
-    panzoom.setInView(this.x, this.y);
+    panzoom.setInView(this.x, this.y - height / 3);
   }
 
   controls(dt) {
@@ -44,7 +44,8 @@ class Player extends CollisionObject {
     if (this.vx > 0) this.facing = 'right';
 
     if (!this.swimming) {
-      this.tilt = HALF_PI;
+      walkCycleGif.pause();
+      walkCycleGif.setFrame(6);
     }
 
     if (keys.W || keys.S || keys.A || keys.D) {
@@ -84,6 +85,14 @@ class Player extends CollisionObject {
       this.vy = 0;
     }
 
+    if (this.swimming) {
+      panzoom.trackZoom(2);
+      panzoom.trackPos(this.x, this.y);
+    } else {
+      panzoom.trackZoom(0.5);
+      panzoom.trackPos(this.x, this.y - height / 3);
+    }
+
     if (this.swimming) this.y = Math.max(0, this.y);
 
     const FLIP = this.facing === 'left' ? 1 : -1;
@@ -101,9 +110,16 @@ class Player extends CollisionObject {
     push();
     translate(this.x, this.y);
     scale(FLIP, 1);
-    rotate(this.tilt);
     // rect(0, 0, this.w, this.h);
-    image(scoobaSwimGif, 0, 0);
+    
+    if (this.swimming) {
+      rotate(this.tilt);
+      image(scoobaSwimGif, 0, 0);
+    } else {
+      image(walkCycleGif, 0, 0);
+    }
+
+
     pop();
 
     // Debug collision mesh

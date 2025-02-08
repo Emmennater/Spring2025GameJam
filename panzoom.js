@@ -1,7 +1,7 @@
 
 class PanZoom {
   constructor() {
-    this.zoom = 2;
+    this.zoom = 0.5;
     this.xoff = 0;
     this.yoff = 0;
     this.gap = 50;
@@ -22,6 +22,10 @@ class PanZoom {
     const newX = lerp(-this.xoff, x, 0.1);
     const newY = lerp(-this.yoff, y, 0.1);
     this.setInView(newX, newY);
+  }
+
+  trackZoom(zoom) {
+    this.zoom = lerp(this.zoom, zoom, 0.1);
   }
   
   // Events
@@ -46,16 +50,16 @@ class PanZoom {
       this.keys[k] = false;
     });
     
-    document.addEventListener("wheel", e => {
-      const ZOOM_RATE = 0.1;
-      if (e.deltaY < 0) {
-        this.zoomIn(0.5);
-        // this.zoomIn(-e.deltaY / 100 * ZOOM_RATE)
-      } else {
-        this.zoomOut(0.5);
-        // this.zoomOut(e.deltaY / 100 * ZOOM_RATE)
-      }
-    });
+    // document.addEventListener("wheel", e => {
+    //   const ZOOM_RATE = 0.1;
+    //   if (e.deltaY < 0) {
+    //     this.zoomIn(0.5);
+    //     // this.zoomIn(-e.deltaY / 100 * ZOOM_RATE)
+    //   } else {
+    //     this.zoomOut(0.5);
+    //     // this.zoomOut(e.deltaY / 100 * ZOOM_RATE)
+    //   }
+    // });
   }
   
   disableRightClickDropDown() {

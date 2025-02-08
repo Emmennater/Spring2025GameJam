@@ -1,12 +1,13 @@
 
 class GUI {
   constructor() {
-    this.guiComponents = [];
+    this.guiComponents = {};
     this.splashTexts = [];
     this.resources = new Resources(this);
-    this.guiComponents.push(new Text("Money"));
-    this.guiComponents.push(new Meter("Food", 0, 100));
-    this.guiComponents.push(new Meter("Health", 0, 100, color(230, 110, 110)));
+    this.guiComponents.money = new Text("Money");
+    this.guiComponents.time = new Meter("Time", 0, 100, color(255));
+    this.guiComponents.food = new Meter("Food", 0, 100);
+    this.guiComponents.health = new Meter("Health", 0, 100, color(230, 110, 110));
     this.addFood(80, true);
     this.addMoney(100, true);
     this.addHealth(100, true);
@@ -29,14 +30,14 @@ class GUI {
 
     if (diff == 0 && !force) return;
     
-    let comp = this.guiComponents[1];
+    let comp = this.guiComponents.food;
     let sign = ['-', '', '+'][Math.sign(diff) + 1];
     
     if (!force) {
       this.splashText(`${sign} ${Math.abs(diff)}`, comp.x + comp.w + 20, comp.y + comp.h / 2, 1, color(255), diff > 0);
     }
 
-    this.guiComponents[1].setValue(this.resources.food);
+    this.guiComponents.food.setValue(this.resources.food);
   }
 
   addMoney(diff, force = false) {
@@ -46,14 +47,14 @@ class GUI {
 
     if (diff == 0 && !force) return;
     
-    let comp = this.guiComponents[0];
+    let comp = this.guiComponents.money;
     let sign = ['-', '', '+'][Math.sign(diff) + 1];
     
     if (!force) {
       this.splashText(`${sign} $${Math.abs(diff).toFixed(2)}`, comp.x + comp.w + 40, comp.y + comp.h / 2, 1, color(255), diff > 0);
     }
     
-    this.guiComponents[0].setValue(`$${this.resources.money.toFixed(2)}`);
+    this.guiComponents.money.setValue(`$${this.resources.money.toFixed(2)}`);
   }
 
   addHealth(diff, force = false) {
@@ -63,7 +64,7 @@ class GUI {
 
     if (diff == 0 && !force) return;
     
-    let comp = this.guiComponents[2];
+    let comp = this.guiComponents.health;
     let sign = ['-', '', '+'][Math.sign(diff) + 1];
     
     if (!force) {
@@ -71,7 +72,17 @@ class GUI {
       this.splashText(`${sign} ${Math.abs(diff)}`, comp.x + comp.w + 20, comp.y + comp.h / 2, 1, c, diff > 0);
     }
     
-    this.guiComponents[2].setValue(this.resources.health);
+    this.guiComponents.health.setValue(this.resources.health);
+  }
+
+  addTime(diff, force = false) {
+    const oldTime = this.resources.time;
+    this.resources.time = constrain(this.resources.time + diff, 0, 100);
+    diff = this.resources.time - oldTime;
+
+    if (diff == 0 && !force) return;
+    
+    this.guiComponents.time.setValue(this.resources.time);
   }
 
   update(dt) {
@@ -103,8 +114,10 @@ class GUI {
     const COMP_SPACING = 10;
     const COMP_X = 10;
     const COMP_Y = 10;
-    for (let i = 0; i < this.guiComponents.length; i++) {
-      this.guiComponents[i].draw(COMP_X, COMP_Y + COMP_H * i + COMP_SPACING * i, COMP_W, COMP_H);
+    let i = 0;
+    for (let key in this.guiComponents) {
+      this.guiComponents[key].draw(COMP_X, COMP_Y + COMP_H * i + COMP_SPACING * i, COMP_W, COMP_H);
+      i++;
     }
 
     // Draw splash texts
