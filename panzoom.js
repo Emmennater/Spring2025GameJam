@@ -48,10 +48,12 @@ class PanZoom {
     
     document.addEventListener("wheel", e => {
       const ZOOM_RATE = 0.1;
-      if (e.delta < 0) {
-        this.zoomIn(-e.deltaY / 100 * ZOOM_RATE)
+      if (e.deltaY < 0) {
+        this.zoomIn(0.5);
+        // this.zoomIn(-e.deltaY / 100 * ZOOM_RATE)
       } else {
-        this.zoomOut(e.deltaY / 100 * ZOOM_RATE)
+        this.zoomOut(0.5);
+        // this.zoomOut(e.deltaY / 100 * ZOOM_RATE)
       }
     });
   }
