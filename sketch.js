@@ -71,6 +71,16 @@ function preload() {
   bg.cloud2 = loadImage('Assets/Background/clouds_2.png');
   bg.cloud3 = loadImage('Assets/Background/clouds_3.png');
 
+  bg.shipwreck2 = {};
+  bg.shipwreck2.backG1 = loadImage('Assets/Background/backG part 1.png');
+  bg.shipwreck2.backG2 = loadImage('Assets/Background/backG part 2.png');
+  bg.shipwreck2.backG3 = loadImage('Assets/Background/backG part 3.png');
+
+  bg.spike2 = {};
+  bg.spike2.backG1 = loadImage('Assets/Background/backG spike 1.png');
+  bg.spike2.backG2 = loadImage('Assets/Background/backG spike 2.png');
+  bg.spike2.backG3 = loadImage('Assets/Background/backG spike 3.png');
+
   // Sounds
   sound = {};
   sound.quotaReached = loadSound('Assets/Sound/quota_reached.wav');

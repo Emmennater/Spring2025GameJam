@@ -14,6 +14,12 @@ class World {
     const layers = [];
     const biomes = Array(sizex);
 
+    // Biomes
+    for (let i = 0; i < sizex; i++) {
+      const choices = [0, 1, 2];
+      biomes[i] = choices[floor(random(choices.length))];
+    }
+
     // Initialize
     for (let k = 0; k < 5; k++) {
       layers[k] = [];
@@ -62,20 +68,15 @@ class World {
     }
 
     for (let i = 0; i < sizex; i++) {
+      const biome = biomes[i];
       // Random islands
-      if (Math.random() < 0.2) {
-        layers[3][0][i] = this.getRandomIsland();
+      if (Math.random() < 0.5) {
+        layers[3][0][i] = this.getRandomIsland(biome);
       }
       // Random clouds
       if (Math.random() < 0.7) {
         layers[4][0][i] = this.getRandomCloud();
       }
-    }
-
-    // Biomes
-    for (let i = 0; i < sizex; i++) {
-      const choices = [0, 1, 2];
-      biomes[i] = choices[floor(random(choices.length))];
     }
 
     // Biomes
@@ -122,8 +123,11 @@ class World {
     this.biomes = biomes;
   }
 
-  getRandomIsland() {
-    const choices = [37, 38];
+  getRandomIsland(biome = 0) {
+    const choices1 = [37, 38];
+    const choices2 = [45, 46, 47];
+    const choices3 = [48, 49, 50];
+    const choices = biome === 0 ? choices1 : biome === 1 ? choices2 : choices3;
     return choices[floor(random(choices.length))];
   }
 
@@ -210,6 +214,14 @@ class World {
       case 40: return bg.cloud1;
       case 41: return bg.cloud2;
       case 42: return bg.cloud3;
+
+      // Top water
+      case 45: return bg.shipwreck2.backG1;
+      case 46: return bg.shipwreck2.backG2;
+      case 47: return bg.shipwreck2.backG3;
+      case 48: return bg.spike2.backG1;
+      case 49: return bg.spike2.backG2;
+      case 50: return bg.spike2.backG3;
     }
   }
 
