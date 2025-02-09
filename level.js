@@ -20,7 +20,7 @@ class Level {
 
   gameOver() {
     gui.addTime(-gui.resources.time);
-    alert("game over");
+    scenes.cutSceneTo(new GameOverScene());
   }
 
   update(dt) {

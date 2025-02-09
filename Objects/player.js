@@ -80,7 +80,7 @@ class Player extends CollisionObject {
     const { crate, distance } = getNearestCrate(this.x, this.y);
     const { fish, distance: fishDistance } = getNearestFish(this.x, this.y);
 
-    if (fishDistance < distance) { obj = fish; dis = fishDistance; }
+    if (fishDistance < distance && fish instanceof Carriable) { obj = fish; dis = fishDistance; }
     else { obj = crate; dis = distance; }
 
     if (dis > 60 || obj == this.carrying) return;
