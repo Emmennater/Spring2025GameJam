@@ -37,6 +37,24 @@ function preload() {
   bg.coral.front_tube_coral_2 = loadImage('Assets/Background/Coral/front_tube_coral_2.png');
   bg.coral.front_tube_coral_3 = loadImage('Assets/Background/Coral/front_tube_coral_3.png');
 
+  // Shipwreck
+  bg.shipwreck = {};
+  bg.shipwreck.back_part_1 = loadImage('Assets/Background/Shipwreck/back_part_1.png');
+  bg.shipwreck.back_part_2 = loadImage('Assets/Background/Shipwreck/back_part_2.png');
+  bg.shipwreck.back_part_3 = loadImage('Assets/Background/Shipwreck/back_part_3.png');
+  bg.shipwreck.front_part_1 = loadImage('Assets/Background/Shipwreck/front_part_1.png');
+  bg.shipwreck.front_part_2 = loadImage('Assets/Background/Shipwreck/front_part_2.png');
+  bg.shipwreck.front_part_3 = loadImage('Assets/Background/Shipwreck/front_part_3.png');
+
+  // Spike
+  bg.spike = {};
+  bg.spike.back_spike_1 = loadImage('Assets/Background/Spike/back_spike_1.png');
+  bg.spike.back_spike_2 = loadImage('Assets/Background/Spike/back_spike_2.png');
+  bg.spike.back_spike_3 = loadImage('Assets/Background/Spike/back_spike_3.png');
+  bg.spike.front_spike_1 = loadImage('Assets/Background/Spike/front_spike_1.png');
+  bg.spike.front_spike_2 = loadImage('Assets/Background/Spike/front_spike_2.png');
+  bg.spike.front_spike_3 = loadImage('Assets/Background/Spike/front_spike_3.png');
+
   titlescreen = loadImage('Assets/titlescreen.png');
   gameoverGif = loadImage('Assets/gameover.gif');
 }

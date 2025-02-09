@@ -190,7 +190,9 @@ function getRandomFish(init = false, type = null) {
   const randomIndex = Math.floor(Math.random() * types.length);
   const FishType = type ? type : types[randomIndex];
   const [ylow, yhigh] = getSpawnRange(FishType);
-  let x = random(-scene.world.size, scene.world.size);
+
+  // let x = random(-scene.world.size, scene.world.size);
+  let x = scene.world.getRandomBiomeX(getSpawnBiome(FishType));
   let y = random(ylow, yhigh);
   let closest = getNearestFish(x, y);
   let i = 0;

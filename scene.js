@@ -125,6 +125,7 @@ class GameScene extends Scene {
     this.level = new Level();
     this.paused = false;
     this.timeFade = 0;
+    this.biomeFilter = color(255);
   }
 
   pause() {
@@ -235,6 +236,27 @@ class GameScene extends Scene {
 
     return finalColor;
   }
+
+  getBiomeFilter() {
+    const biome = this.world.getBiomeAt(player.x);
+    let col = color(255);
+
+    switch (biome) {
+      case 0: // Coral
+        col = color(255);
+        break;
+      case 1: // Shipwreck
+        col = color(100, 170, 255);
+        break;
+      case 2: // Spike
+        col = color(150, 255, 170);
+        break;
+    }
+
+    this.biomeFilter = lerpColor(this.biomeFilter, col, 0.02);
+
+    return this.biomeFilter;
+  }
   
   drawBackground() {
     const focus = panzoom.unscaleCoordinate(player.x, player.y);
@@ -287,7 +309,13 @@ class GameScene extends Scene {
     let ctx = drawingContext;
     ctx.save();
     ctx.globalCompositeOperation = "multiply";
-    background(this.getDaytimeFilter());
+
+    const biomeFilter = this.getBiomeFilter();
+    const dayFilter = this.getDaytimeFilter();
+    
+    background(biomeFilter);
+    background(dayFilter);
+
     ctx.restore();
 
     // Get the canvas 2D context so we can set a blending mode
@@ -529,6 +557,26 @@ function getSpawnRange(Type) {
   }
 }
 
+function getSpawnBiome(Type) {
+  switch (Type) {
+    case GreenCrate:
+      return [0, 1];
+    case OrangeCrate:
+      return [1, 2];
+    case RedCrate:
+      return [1, 2];
+    case Fish:
+      return [0, 2];
+    case SmallFish:
+      return [0];
+    case Shark:
+      return [0, 1];
+    case Angler:
+      return [1, 2];
+    case BigFish:
+      return [0, 1];
+  }
+}
 
 
 

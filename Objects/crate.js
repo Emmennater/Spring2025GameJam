@@ -107,7 +107,8 @@ function getRandomCrate(init = false, type = null) {
   const CrateType = type ? type : types[randomIndex];
   const [ylow, yhigh] = getSpawnRange(CrateType);
 
-  let x = random(-scene.world.size, scene.world.size);
+  let x = scene.world.getRandomBiomeX(getSpawnBiome(CrateType));
+  // let x = random(-scene.world.size, scene.world.size);
   let y = random(ylow, yhigh);
   let closest = getNearestCrate(x, y);
   let i = 0;
