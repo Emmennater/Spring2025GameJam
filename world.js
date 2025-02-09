@@ -5,7 +5,7 @@ class World {
     this.tileW = 512;
     this.tileH = 864;
     this.generateTilemaps();
-    this.size = this.tileW * (this.tilemaps[0][0].length - 4) / 2;
+    this.size = this.tileW * (this.tilemaps[0][0].length - 4) / 2 - this.tileW * 0.3;
   }
 
   generateTilemaps() {
@@ -181,22 +181,30 @@ class World {
     return random(biomeLeft, biomeRight);
   }
 
-  drawTilemap(tilemap) {
+  drawTilemap(tilemap, level = 0) {
     const xoff = (width - (tilemap[0].length + 3) * this.tileW) / 2;
     const yoff = -this.tileH * 1.05;
 
     imageMode(CORNER);
+    rectMode(CORNER);
     for (let y = 0; y < tilemap.length; y++) {
       for (let x = 0; x < tilemap[y].length; x++) {
         const i = tilemap[y][x];
         const img = this.getTileImage(i);
         if (!img) continue;
-        image(img, x * (this.tileW - 1) + xoff, y * (this.tileH - 1) + yoff);
+        const x1 = x * this.tileW + xoff;
+        const y1 = y * this.tileH + yoff;
+        image(img, x1, y1);
+
+        if (level == 0 && (x <= 1 || x >= tilemap[y].length - 2)) {
+          fill(0, 0, 0, 100);
+          rect(x1, y1, this.tileW, this.tileH);
+        }
       }
     }
   }
 
   draw(level = 0) {
-    this.drawTilemap(this.tilemaps[level]);
+    this.drawTilemap(this.tilemaps[level], level);
   }
 }
