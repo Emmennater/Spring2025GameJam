@@ -3,7 +3,9 @@ function preload() {
   orangeCrate = loadImage('Assets/gamejam_crate_orange.png');
   redCrate = loadImage('Assets/gamejam_crate_red.png');
   scoobaSwimGif = loadImage('Assets/scooba_swim.gif');
+  swimArmsDownGif = loadImage('Assets/swimarmsdown.gif');
   walkCycleGif = loadImage('Assets/walk_cycle.gif');
+
   boatImg = loadImage('Assets/boat.png');
   
   // Fish

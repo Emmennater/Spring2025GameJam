@@ -9,7 +9,7 @@ class World {
   }
 
   generateTilemaps() {
-    const sizex = 18;
+    const sizex = 20;
     const sizey = 4;
     const layers = [];
     const biomes = Array(sizex);
@@ -168,7 +168,7 @@ class World {
     let its = 0;
 
     while (its++ < 50) {
-      sliceIdx = floor(random(this.biomes.length));
+      sliceIdx = floor(random(3, this.biomes.length - 3));
 
       if (this.biomes[sliceIdx] === biomeIdx) {
         break;

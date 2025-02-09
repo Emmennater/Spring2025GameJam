@@ -109,6 +109,20 @@ class Player extends CollisionObject {
     }
   }
 
+  getHoldPos() {
+    if (!this.carrying) return [this.x, this.y];
+
+    let flip = this.facing === 'left' ? -1 : 1;
+    let w = this.w * 0.35;
+    let h = this.h * 0.2;
+
+    // Account for rotation (this.tilt) about center (this.x, this.y)
+    let x = this.x + (cos(this.tilt) * this.w * 0.38) * flip;
+    let y = this.y - sin(this.tilt) * this.h * 0.6 + this.h * 0.2;
+    
+    return [x, y];
+  }
+
   controls(dt) {
     const CAN_SWIM_UP = this.y > 40;
     
@@ -211,7 +225,11 @@ class Player extends CollisionObject {
     
     if (this.swimming) {
       rotate(this.tilt);
-      image(scoobaSwimGif, 0, 0);
+      if (this.carrying) {
+        image(swimArmsDownGif, 0, 0);
+      } else {
+        image(scoobaSwimGif, 0, 0);
+      }
     } else {
       image(walkCycleGif, 0, 0);
     }

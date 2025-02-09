@@ -44,7 +44,8 @@ class Crate extends Carriable {
     imageMode(CENTER);
     
     if (this.carrier) {
-      image(this.sprite, this.carrier.x, this.carrier.y);
+      const [x, y] = this.carrier.getHoldPos();
+      image(this.sprite, x, y);
     } else {
       image(this.sprite, this.x, this.y);
     }

@@ -161,8 +161,7 @@ class SmallFish extends Carriable {
     let y = this.y;
 
     if (this.carrier) {
-      x = this.carrier.x;
-      y = this.carrier.y;
+      [x, y] = this.carrier.getHoldPos();
     }
 
     imageMode(CENTER);
