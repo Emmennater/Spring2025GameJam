@@ -217,13 +217,13 @@ class GameScene extends Scene {
     print(t);
 
     let earlyColor = color(0, 0, 0, 210);
-    let midColor = color(200, 100, 0, 50);
+    let midColor = color(200, 100, 0, 100);
     let lateColor = color(255, 255, 255, 0);
 
     let finalColor = color(0, 0);
 
     let timeStops = [0, 0.1, 0.3, 0.7, 0.8, 1];
-    let colorStops = [earlyColor, midColor, lateColor, lateColor, midColor, earlyColor];
+    let colorStops = [midColor, lateColor, lateColor, lateColor, midColor, earlyColor];
 
     for (let i = 0; i < timeStops.length - 1; i++) {
       if (t >= timeStops[i] && t < timeStops[i + 1]) {
