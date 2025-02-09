@@ -202,7 +202,7 @@ function getRandomFish(init = false, type = null) {
   let closest = getNearestFish(x, y);
   let i = 0;
   
-  while (closest.distance < 200 && (!init && dist(player.x, player.y, x, y) > 3000)) {
+  while (closest.distance < 100 && (!init && dist(player.x, player.y, x, y) > 3000)) {
     x = random(-scene.world.size, scene.world.size);
     y = random(ylow, yhigh);
     closest = getNearestFish(x, y);
