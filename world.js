@@ -10,7 +10,7 @@ class World {
 
   generateTilemaps() {
     const sizex = 20;
-    const sizey = 4;
+    const sizey = 5;
     const layers = [];
     const biomes = Array(sizex);
 
@@ -22,6 +22,12 @@ class World {
         for (let i = 0; i < sizex; i++) {
           layers[k][j][i] = 0;
         }
+      }
+    }
+
+    for (let j = 0; j < sizey; j++) {
+      for (let i = 0; i < sizex; i++) {
+        layers[0][j][i] = 6;
       }
     }
 
@@ -57,33 +63,38 @@ class World {
     }
 
     // Biomes
-    for (let i = 0; i < sizex; i++) {
-      const biome = biomes[i];
-
-      switch (biome) {
-        case 0:
-          layers[2][1][i] = this.getRandomCoral();
-          break;
-        case 1:
-          layers[2][1][i] = this.getRandomShipwreck();
-          break;
-        case 2:
-          layers[2][1][i] = this.getRandomSpike();
-          break;
-      }
-
-      switch (biome) {
-        case 0:
-          if (Math.random() < 0.5)
-            layers[0][2][i] = 34;
-          break;
-        case 1:
-          if (i < sizex - 1 && biomes[i + 1] === biome && layers[2][2][i] !== 35 && Math.random() < 0.5) {
-            layers[0][2][i] = 36;
-            layers[0][2][i + 1] = 35;
+    for (let j = 0; j < sizey; j++) {
+      for (let i = 0; i < sizex; i++) {
+        const biome = biomes[i];
+        
+        if (j == 1) {
+          switch (biome) {
+            case 0:
+              layers[2][j][i] = this.getRandomCoral();
+              break;
+            case 1:
+              layers[2][j][i] = this.getRandomShipwreck();
+              break;
+            case 2:
+              layers[2][j][i] = this.getRandomSpike();
+              break;
           }
+        }
+
+        if (j > 1) {
+          switch (biome) {
+            case 0:
+              if (Math.random() < 0.5)
+                layers[0][j][i] = 34;
+              break;
+            case 1:
+              if (i < sizex - 1 && biomes[i + 1] === biome && layers[0][j][i] !== 35 && Math.random() < 0.5) {
+                layers[0][j][i] = 36;
+                layers[0][j][i + 1] = 35;
+              }
+          }
+        }
       }
-      
     }
 
     this.tilemaps = layers;

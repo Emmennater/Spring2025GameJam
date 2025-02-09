@@ -192,8 +192,8 @@ class Player extends CollisionObject {
       this.vx = 0;
     }
 
-    if (this.y > 3200) {
-      this.y = 2200;
+    if (this.y > 2800) {
+      this.y = 2800;
       this.vy = 0;
     }
 
