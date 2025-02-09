@@ -67,6 +67,9 @@ function preload() {
   bg.island2 = loadImage('Assets/Background/Island/island_2.png');
   
   bg.oceanFloor = loadImage('Assets/Background/ocean_floor.png');
+  bg.cloud1 = loadImage('Assets/Background/clouds_1.png');
+  bg.cloud2 = loadImage('Assets/Background/clouds_2.png');
+  bg.cloud3 = loadImage('Assets/Background/clouds_3.png');
 
   // Sounds
   sound = {};
@@ -76,6 +79,9 @@ function preload() {
   sound.boatNoise = loadSound('Assets/Sound/boat_noise.wav');
   sound.boxPickup = loadSound('Assets/Sound/box_pickup.wav');
   sound.fishPickup = loadSound('Assets/Sound/fish_pickup.wav');
+  sound.DiveOrDieTheme = loadSound('Assets/Sound/DiveOrDieTheme.mp3');
+  sound.boatDismount = loadSound('Assets/Sound/boat_dismount.wav');
+  
 }
 
 function setup() {
@@ -105,5 +111,30 @@ function initSounds() {
   setTimeout(() => {
     sound.boatNoise.loop();
     sound.boatNoise.setVolume(0);
+
+    let randomStartTime = random(0, sound.DiveOrDieTheme.duration()); 
+    sound.DiveOrDieTheme.loop();
+    sound.DiveOrDieTheme.jump(randomStartTime);
+    sound.DiveOrDieTheme.setVolume(0); // Start silent
+
+    // Manual fade-in effect
+    let targetVolume = 0.05; // Lower final volume
+    let duration = 2000; // 2 seconds
+    let steps = 50; // Number of steps in fade-in
+    let intervalTime = duration / steps;
+    let volumeStep = targetVolume / steps;
+    
+    let currentVolume = 0;
+    let fadeInterval = setInterval(() => {
+      currentVolume += volumeStep;
+      if (currentVolume >= targetVolume) {
+        currentVolume = targetVolume;
+        clearInterval(fadeInterval);
+      }
+      sound.DiveOrDieTheme.setVolume(currentVolume);
+    }, intervalTime);
+
   }, 100);
 }
+
+

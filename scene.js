@@ -274,6 +274,14 @@ class GameScene extends Scene {
 
     panzoom.begin();
     this.world.draw(0);
+    panzoom.end();
+    panzoom.begin(0.75);
+    this.world.draw(3);
+    panzoom.end();
+    panzoom.begin(0.5);
+    this.world.draw(4);
+    panzoom.end();
+    panzoom.begin();
     this.world.draw(2);
     panzoom.end();
   }

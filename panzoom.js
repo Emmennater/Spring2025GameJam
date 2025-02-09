@@ -88,11 +88,11 @@ class PanZoom {
   }
 
   
-  begin() {
+  begin(parallax = 1) {
     push()
     translate(width/2, height/2);
     scale(this.zoom);
-    translate(this.xoff, this.yoff);
+    translate(this.xoff * parallax, this.yoff * parallax);
   }
   
   end() {

@@ -15,7 +15,7 @@ class World {
     const biomes = Array(sizex);
 
     // Initialize
-    for (let k = 0; k < 3; k++) {
+    for (let k = 0; k < 5; k++) {
       layers[k] = [];
       for (let j = 0; j < sizey; j++) {
         layers[k][j] = [];
@@ -61,10 +61,14 @@ class World {
       layers[0][4][i] = this.getRandomScaryDepth();
     }
 
-    // Random islands
     for (let i = 0; i < sizex; i++) {
+      // Random islands
       if (Math.random() < 0.2) {
-        layers[2][0][i] = this.getRandomIsland();
+        layers[3][0][i] = this.getRandomIsland();
+      }
+      // Random clouds
+      if (Math.random() < 0.7) {
+        layers[4][0][i] = this.getRandomCloud();
       }
     }
 
@@ -120,6 +124,11 @@ class World {
 
   getRandomIsland() {
     const choices = [37, 38];
+    return choices[floor(random(choices.length))];
+  }
+
+  getRandomCloud() {
+    const choices = [40, 41, 42];
     return choices[floor(random(choices.length))];
   }
 
@@ -198,6 +207,9 @@ class World {
       case 37: return bg.island1;
       case 38: return bg.island2;
       case 39: return bg.oceanFloor;
+      case 40: return bg.cloud1;
+      case 41: return bg.cloud2;
+      case 42: return bg.cloud3;
     }
   }
 

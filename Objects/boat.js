@@ -30,6 +30,7 @@ class Boat {
     player.y += 50;
     scoobaSwimGif.play();
     this.boarded = false;
+    sound.boatDismount.play(0, random(0.8, 1.2), 0.08);
   }
   
   board() {

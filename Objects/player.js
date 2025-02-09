@@ -71,7 +71,7 @@ class Player extends CollisionObject {
   }
 
   setInView() {
-    panzoom.setInView(this.x, this.y - height / 8);
+    panzoom.setInView(this.x, this.y - height / 6);
   }
 
   pickups() {
@@ -205,7 +205,7 @@ class Player extends CollisionObject {
       panzoom.trackPos(this.x, this.y);
     } else {
       panzoom.trackZoom(1);
-      panzoom.trackPos(this.x, this.y - height / 8);
+      panzoom.trackPos(this.x, this.y - height / 6);
     }
 
     if (this.swimming) this.y = Math.max(0, this.y);
