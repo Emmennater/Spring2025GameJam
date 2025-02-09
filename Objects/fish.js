@@ -4,6 +4,7 @@ class Fish extends CollisionObject {
     super(x, y, w, h);
     this.sprite = monsterFish1Gif;
     this.angle = 0;
+    this.targetAngle = 0;
     this.speed = 100;
     this.vel = 0;
     this.vx = 0;
@@ -21,7 +22,7 @@ class Fish extends CollisionObject {
   }
 
   followPlayer() {
-    this.angle = atan2(player.y - this.y, player.x - this.x);
+    this.targetAngle = atan2(player.y - this.y, player.x - this.x);
     this.vel = this.speed;
   }
 
@@ -29,15 +30,15 @@ class Fish extends CollisionObject {
     const [ylow, yhigh] = getSpawnRange(this.constructor);
 
     if (this.y < ylow) {
-      this.angle = PI / 2;
+      this.targetAngle = PI / 2;
       this.vel = this.speed / 2;
     } else if (this.y > yhigh) {
-      this.angle = -PI / 2;
+      this.targetAngle = -PI / 2;
       this.vel = this.speed / 2;
     } else {
       const vx = (noise(frameCount / 100 + this.toff) - 0.5) * 100;
       this.vel = Math.abs(vx);
-      this.angle = vx > 0 ? 0 : PI;
+      this.targetAngle = vx > 0 ? 0 : PI;
     }
   }
 
@@ -50,6 +51,7 @@ class Fish extends CollisionObject {
       this.wander();
     }
     
+    this.angle = lerpAngle(this.angle, this.targetAngle, 0.1);
     this.vx = cos(this.angle) * this.vel;
     this.vy = sin(this.angle) * this.vel;
     this.x += this.vx * dt;
