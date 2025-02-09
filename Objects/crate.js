@@ -64,7 +64,7 @@ class GreenCrate extends Crate {
 
   destroy() {
     super.destroy();
-    const loot = this.getRandomLoot({ coin: 0.3, food: 0.5, trash: 0.2 }, 1, 1);
+    const loot = this.getRandomLoot({ coin: 0.4, food: 0.4, trash: 0.2 }, 1, 2);
     gui.addMoney(loot.coin * 10);
     gui.addFood(loot.food * 10);
   }
@@ -95,7 +95,7 @@ class RedCrate extends Crate {
 
   destroy() {
     super.destroy();
-    const loot = this.getRandomLoot({ coin: 0.5, food: 0.2, trash: 0.3 }, 4, 6);
+    const loot = this.getRandomLoot({ coin: 0.5, food: 0.2, trash: 0.1 }, 4, 6);
     gui.addMoney(loot.coin * 10);
     gui.addFood(loot.food * 10);
   }

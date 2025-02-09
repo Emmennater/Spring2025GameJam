@@ -159,11 +159,11 @@ class GameScene extends Scene {
       spawnRandomCrate(true, RedCrate);
 
     // Fish
-    for (let i = 0; i < 10; i++)
+    for (let i = 0; i < 5; i++)
       spawnRandomFish(true, Fish);
     for (let i = 0; i < 40; i++)
       spawnRandomFish(true, SmallFish);
-    for (let i = 0; i < 10; i++)
+    for (let i = 0; i < 5; i++)
       spawnRandomFish(true, Shark);
     for (let i = 0; i < 5; i++)
       spawnRandomFish(true, Angler);

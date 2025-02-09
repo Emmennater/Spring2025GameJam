@@ -84,7 +84,7 @@ class Fish extends CollisionObject {
 class Shark extends Fish {
   constructor(x, y) {
     super(x, y, 100, 50);
-    this.speed = 100;
+    this.speed = 50;
     this.sprite = sharkGif;
     this.damage = 10;
   }

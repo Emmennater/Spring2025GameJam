@@ -19,9 +19,9 @@ class Boat {
   }
 
   canBoard() {
-    const DIST_TO_BOAT = dist(player.x, player.y, this.x, this.y);
+    const DIST_TO_BOAT = Math.sqrt((player.x - this.x) ** 2 + ((player.y - this.y) ** 2) * 2);
     
-    return DIST_TO_BOAT < 100 && player.swimming;
+    return DIST_TO_BOAT < 150 && player.swimming;
   }
 
   dismount() {
