@@ -192,8 +192,8 @@ class World {
         const i = tilemap[y][x];
         const img = this.getTileImage(i);
         if (!img) continue;
-        const x1 = x * this.tileW + xoff;
-        const y1 = y * this.tileH + yoff;
+        const x1 = x * (this.tileW - 1) + xoff;
+        const y1 = y * (this.tileH - 1) + yoff;
         image(img, x1, y1);
 
         if (level == 0 && (x <= 1 || x >= tilemap[y].length - 2)) {
