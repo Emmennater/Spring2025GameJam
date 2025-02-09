@@ -9,7 +9,7 @@ class PanZoom {
     this.pmouse = { x: 0, y: 0 };
     this.keys = {};
     this.zoomToMouse = false;
-    this.debug = false;
+    this.debug = true;
     this.ignoreInput = 0;
     this.initEvents();
   }

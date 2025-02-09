@@ -23,6 +23,9 @@ function preload() {
   bg.skull_depth = loadImage('Assets/Background/skull_depth.png');
   bg.sky = loadImage('Assets/Background/sky.png');
   bg.water_surface = loadImage('Assets/Background/water_surface.png');
+  bg.coral_shelves = loadImage('Assets/Background/coral_shelves.png');
+  bg.sunken_sub_right = loadImage('Assets/Background/sunken_sub_right.png');
+  bg.sunken_sub_left = loadImage('Assets/Background/sunken_sub_left.png');
 
   // Coral
   bg.coral = {};

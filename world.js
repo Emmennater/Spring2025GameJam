@@ -56,25 +56,34 @@ class World {
       biomes[i] = choices[floor(random(choices.length))];
     }
 
-    // Coral
+    // Biomes
     for (let i = 0; i < sizex; i++) {
       const biome = biomes[i];
-      let img = null;
-      let level = 1;
 
       switch (biome) {
         case 0:
-          img = this.getRandomCoral();
+          layers[2][1][i] = this.getRandomCoral();
           break;
         case 1:
-          img = this.getRandomShipwreck();
+          layers[2][1][i] = this.getRandomShipwreck();
           break;
         case 2:
-          img = this.getRandomSpike();
+          layers[2][1][i] = this.getRandomSpike();
           break;
       }
 
-      layers[2][level][i] = img;
+      switch (biome) {
+        case 0:
+          if (Math.random() < 0.5)
+            layers[0][2][i] = 34;
+          break;
+        case 1:
+          if (i < sizex - 1 && biomes[i + 1] === biome && layers[2][2][i] !== 35 && Math.random() < 0.5) {
+            layers[0][2][i] = 36;
+            layers[0][2][i + 1] = 35;
+          }
+      }
+      
     }
 
     this.tilemaps = layers;
@@ -143,6 +152,11 @@ class World {
       case 31: return bg.spike.front_spike_1;
       case 32: return bg.spike.front_spike_2;
       case 33: return bg.spike.front_spike_3;
+
+      // Background
+      case 34: return bg.coral_shelves;
+      case 35: return bg.sunken_sub_right;
+      case 36: return bg.sunken_sub_left;
     }
   }
 
