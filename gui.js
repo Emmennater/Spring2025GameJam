@@ -23,6 +23,7 @@ class GUI {
     this.addHealth(-this.resources.health + 100, true);
     this.addMoney(-this.resources.money, true);
     this.addTime(-this.resources.time, true);
+    this.resources.quota = 25;
   }
 
   splashText(...args) {
