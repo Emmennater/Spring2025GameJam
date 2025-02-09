@@ -104,7 +104,7 @@ class World {
         const i = tilemap[y][x];
         const img = this.getTileImage(i);
         if (!img) continue;
-        image(img, x * this.tileW + xoff, y * this.tileH + yoff);
+        image(img, x * (this.tileW - 1) + xoff, y * (this.tileH - 1) + yoff);
       }
     }
   }

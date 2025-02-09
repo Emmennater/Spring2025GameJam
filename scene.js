@@ -9,6 +9,7 @@ class SceneManager {
 
   setScene(scene) {
     this.scene = scene;
+    this.scene.reset();
     this.scene.init();
   }
 
@@ -44,6 +45,14 @@ class Scene {
     
   }
 
+  pause() {
+
+  }
+
+  typed(ch) {
+
+  }
+
   init() {
 
   }
@@ -66,14 +75,44 @@ class TitleScene extends Scene {
 
   draw() {
     background(0);
-    const ASPECT = titlescreen.width / titlescreen.height;
-    const w = height * ASPECT;
-    const x = (width - w) / 2;
-    image(titlescreen, x, 0, w, height);
+    
+    const aspect = (width / height) * (titlescreen.height / titlescreen.width);
+    let w = width;
+    let h = height;
+    let x = 0;
+    let y = 0;
+
+    if (aspect < 1) {
+      h *= aspect;
+      y = (height - h) / 2;
+    } else {
+      w /= aspect;
+      x = (width - w) / 2;
+    }
+
+    image(titlescreen, x, y, w, h);
+
+    textFont("arial");
     fill(255, 100 + (sin(frameCount * 0.1) + 1) / 2 * 155);
     textAlign(CENTER);
     textSize(50);
     text("Press Space to Start", width / 2, height / 2);
+    
+    let sz = h * 0.04;
+    textFont("monospace");
+    fill(219, 183, 15);
+    noStroke();
+    textSize(sz);
+    textAlign(LEFT, TOP);
+
+    let i = 0;
+    for (let name in gui.scoreTracker.highscores) {
+      const score = gui.scoreTracker.highscores[name];
+
+      text(name + "   " + score, x + w * 0.69, y + h * 0.13 + sz * i);
+      
+      if (i++ > 5) break;
+    }
   }
 }
 
@@ -84,14 +123,22 @@ class GameScene extends Scene {
     this.fish = [];
     this.world = new World();
     this.level = new Level();
+    this.paused = false;
+    this.timeFade = 0;
+  }
+
+  pause() {
+    this.paused = !this.paused;
   }
 
   reset() {
     player.reset();
+    boat.reset();
     this.crates = [];
     this.fish = [];
     gui.reset();
     this.level.reset();
+    this.timeFade = 0;
   }
 
   addCrate(crate) {
@@ -132,6 +179,8 @@ class GameScene extends Scene {
   }
 
   update(dt) {
+    if (this.paused) return;
+
     gui.update(dt);
     player.update(dt);
     boat.update(dt);
@@ -158,6 +207,33 @@ class GameScene extends Scene {
     if (gui.resources.health <= 0) {
       scenes.cutSceneTo(new GameOverScene());
     }
+  }
+
+  getDaytimeFilter() {
+    let t = gui.resources.time / gui.resources.maxTime;
+    this.timeFade = lerp(this.timeFade, t, 0.002);
+    t = this.timeFade;
+
+    print(t);
+
+    let earlyColor = color(0, 0, 0, 210);
+    let midColor = color(200, 100, 0, 50);
+    let lateColor = color(255, 255, 255, 0);
+
+    let finalColor = color(0, 0);
+
+    let timeStops = [0, 0.1, 0.3, 0.7, 0.8, 1];
+    let colorStops = [earlyColor, midColor, lateColor, lateColor, midColor, earlyColor];
+
+    for (let i = 0; i < timeStops.length - 1; i++) {
+      if (t >= timeStops[i] && t < timeStops[i + 1]) {
+        let t2 = (t - timeStops[i]) / (timeStops[i + 1] - timeStops[i]);
+        finalColor = lerpColor(colorStops[i], colorStops[i + 1], t2);
+        break;
+      }
+    }
+
+    return finalColor;
   }
   
   drawBackground() {
@@ -207,8 +283,14 @@ class GameScene extends Scene {
     // rect(0, WATER_Y, width, height - WATER_Y);
     background(0, DARKNESS * 255);
 
-    // Get the canvas 2D context so we can set a blending mode
+    // Darken the background
     let ctx = drawingContext;
+    ctx.save();
+    ctx.globalCompositeOperation = "multiply";
+    background(this.getDaytimeFilter());
+    ctx.restore();
+
+    // Get the canvas 2D context so we can set a blending mode
     ctx.save();  
     ctx.globalCompositeOperation = "lighter"; 
   
@@ -237,31 +319,96 @@ class GameScene extends Scene {
     ctx.restore();
 
     gui.draw();
+
+    if (this.paused) {
+      background(0, 100);
+      fill(255);
+      textAlign(CENTER);
+      textSize(Math.min(width, height) * 0.1);
+      text("Paused", width / 2, height / 2);
+    }
   }
 }
 
 class GameOverScene extends Scene {
   constructor() {
     super();
+    this.username = "";
+    this.enteringName = true;
+  }
+
+  reset() {
+    this.username = "";
+    this.enteringName = true;
+  }
+
+  init() {
+    this.isHighscore = gui.scoreTracker.isHighscore(gui.getScore());
+    this.enteringName = this.isHighscore;
+  }
+
+  submitHighscore() {
+    if (this.username === "") return;
+    gui.scoreTracker.addHighscore(this.username, gui.getScore());
+    this.enteringName = false;
+  }
+
+  typed(key) {
+    if (!this.enteringName) return;
+    key = key.toUpperCase();
+    if (key === "BACKSPACE") this.username = this.username.slice(0, -1);
+    else if (key === "ENTER") this.submitHighscore();
+    else if ("ABCDEFGHIJKLMNOPQRSTUVWXYZ".includes(key) && this.username.length < 10) this.username += key;
   }
 
   update(dt) {
-    if (keys.SPACE) {
+    if (keys.SPACE && !this.enteringName) {
       scenes.cutSceneTo(new TitleScene());
     }
   }
 
   draw() {
     background(0);
-    const ASPECT = gameoverGif.width / gameoverGif.height;
-    const w = height * ASPECT;
-    const x = (width - w) / 2;
-    image(gameoverGif, x, 0, w, height);
     
-    fill(255, 100 + (sin(frameCount * 0.1) + 1) / 2 * 155);
+    const aspect = (width / height) * (gameoverGif.height / gameoverGif.width);
+    let w = width;
+    let h = height;
+    let x = 0;
+    let y = 0;
+
+    if (aspect < 1) {
+      h *= aspect;
+      y = (height - h) / 2;
+    } else {
+      w /= aspect;
+      x = (width - w) / 2;
+    }
+
+    image(gameoverGif, x, y, w, h);
+    
+    const highscore = gui.getScore();
+
+    // Username
+    let fs = Math.min(w, h) * 0.05;
+    let inputUnderscore = frameCount % 45 < 20 && this.enteringName ? "_" : " ";
+    let enterName = this.enteringName ? "Enter your name: " : "";
+    fill(255);
     textAlign(CENTER);
-    textSize(30);
-    text("Press Space to Continue", width / 2, height * 0.75);
+    textFont("monospace");
+    textSize(fs * 1.25);
+    text(enterName + this.username + inputUnderscore, width / 2, height * 0.05);
+
+    // Score
+    let scoreText = this.isHighscore ? "High Score " : "Score ";
+    textSize(fs * 1.5);
+    text(scoreText + highscore, x + w / 2, y + h * 0.15);
+
+    // Continue
+    textFont("arial");
+    fill(255, 100 + (sin(frameCount * 0.1) + 1) / 2 * 155);
+    textSize(fs);
+    textFont("arial");
+    text("Press Space to Continue", x + w / 2, y + h * 0.75);
   }
 }
 

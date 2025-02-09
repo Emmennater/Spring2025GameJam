@@ -5,11 +5,16 @@ class GUI {
     this.splashTexts = [];
     this.resources = new Resources(this);
     this.guiComponents.level = new Text("Level");
-    this.guiComponents.time = new ClockMeter("Time", 0, 100, color(200));
+    this.guiComponents.time = new ClockMeter("Time", 0, 96, color(200));
     this.guiComponents.money = new Meter("Quota", 0, 25, color(110, 230, 110));
     this.guiComponents.food = new Meter("Food", 0, 200);
     this.guiComponents.health = new Meter("Health", 0, 100, color(230, 110, 110));
+    this.scoreTracker = new ScoreTracker();
     this.reset();
+  }
+
+  getScore() {
+    return scene.level.score + this.resources.money;
   }
 
   reset() {
@@ -31,8 +36,9 @@ class GUI {
   }
 
   addFood(diff, force = false) {
+    const MAX = this.guiComponents.food.max;
     const oldFood = this.resources.food;
-    this.resources.food = constrain(this.resources.food + diff, 0, 200);
+    this.resources.food = constrain(this.resources.food + diff, 0, MAX);
     diff = this.resources.food - oldFood;
 
     if (diff == 0 && !force) return;
@@ -91,6 +97,13 @@ class GUI {
     diff = this.resources.time - oldTime;
 
     if (diff == 0 && !force) return;
+
+    let comp = this.guiComponents.time;
+    let sign = ['-', '', '+'][Math.sign(diff) + 1];
+
+    if (!force) {
+      this.splashText(`${sign} ${Math.abs(diff).toFixed(0)}`, comp.x + comp.w + 20, comp.y + comp.h / 2, 1, color(255), diff > 0);
+    }
 
     this.guiComponents.time.setValue(this.resources.time);
   }
@@ -228,10 +241,15 @@ class ClockMeter extends Meter {
   constructor(label, min, max, col = color(110, 170, 230)) {
     super(label, min, max, col);
     this.startTime = new Date("2023-02-08T06:00:00"); // Sunrise
-    this.endTime = new Date("2023-02-08T22:30:00"); // Sunset
+    this.endTime = new Date("2023-02-08T22:00:00"); // Sunset
   }
 
   draw(x, y, w, h) {
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+
     // Draw background
     fill(setAlpha(setBrightness(this.col, 0.3), 200));
     rect(x, y, w, h);

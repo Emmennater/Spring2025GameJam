@@ -10,6 +10,10 @@ class Boat {
     this.flipped = false;
   }
   
+  reset() {
+    this.x = 0;
+  }
+
   isMoving() {
     return Math.abs(this.vx) > 0.1;
   }
@@ -62,13 +66,13 @@ class Boat {
       this.updatePlayerPos();
     }
 
-    if (this.x > 1800) {
-      this.x = 1800;
+    if (this.x > scene.world.size - 100) {
+      this.x = scene.world.size - 100;
       this.vx = 0;
     }
 
-    if (this.x < -1800) {
-      this.x = -1800;
+    if (this.x < -scene.world.size + 100) {
+      this.x = -scene.world.size + 100;
       this.vx = 0;
     }
 

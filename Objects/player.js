@@ -167,13 +167,13 @@ class Player extends CollisionObject {
     this.x += this.vx * speedMult * dt;
     this.y += this.vy * speedMult * dt;
 
-    if (this.x > 2000) {
-      this.x = 2000;
+    if (this.x > scene.world.size) {
+      this.x = scene.world.size;
       this.vx = 0;
     }
 
-    if (this.x < -2000) {
-      this.x = -2000;
+    if (this.x < -scene.world.size) {
+      this.x = -scene.world.size;
       this.vx = 0;
     }
 

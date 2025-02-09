@@ -112,7 +112,7 @@ function getRandomCrate(init = false, type = null) {
   let closest = getNearestCrate(x, y);
   let i = 0;
   
-  while (closest.distance < 200 && (!init && dist(player.x, player.y, x, y) > 1000)) {
+  while (closest.distance < 200 && (!init && dist(player.x, player.y, x, y) > 3000)) {
     x = random(-scene.world.size, scene.world.size);
     y = random(ylow, yhigh);
     closest = getNearestCrate(x, y);

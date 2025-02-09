@@ -106,9 +106,10 @@ class SmallFish extends Carriable {
     this.vel = 0;
     this.vx = 0;
     this.vy = 0;
+    this.flipSprite = false;
     this.flipped = false;
     this.toff = random(-100, 100);
-    this.weight = 50;
+    this.weight = 25;
     this.food = 30;
   }
 
@@ -192,7 +193,7 @@ function getRandomFish(init = false, type = null) {
   let closest = getNearestFish(x, y);
   let i = 0;
   
-  while (closest.distance < 200 && (!init && dist(player.x, player.y, x, y) > 1000)) {
+  while (closest.distance < 200 && (!init && dist(player.x, player.y, x, y) > 3000)) {
     x = random(-scene.world.size, scene.world.size);
     y = random(ylow, yhigh);
     closest = getNearestFish(x, y);
