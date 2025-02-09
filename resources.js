@@ -11,7 +11,7 @@ class Resources {
     this.drainFood = true;
     this.parent = parent;
     this.timeSpeed = 1;
-    this.difficulty = 1;
+    this.difficulty = 0.5;
 
     setInterval(() => {
       if (scenes.scene.paused) return;

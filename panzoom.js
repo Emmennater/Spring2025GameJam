@@ -1,7 +1,7 @@
 
 class PanZoom {
   constructor() {
-    this.zoom = 0.5;
+    this.zoom = 1;
     this.xoff = 0;
     this.yoff = 0;
     this.gap = 50;

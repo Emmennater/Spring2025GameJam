@@ -69,7 +69,7 @@ class Player extends CollisionObject {
   }
 
   setInView() {
-    panzoom.setInView(this.x, this.y - height / 3);
+    panzoom.setInView(this.x, this.y - height / 8);
   }
 
   pickups() {
