@@ -60,13 +60,14 @@ class Player extends CollisionObject {
 
   speedUp() {
     if (gui.resources.food <= 0) return;
-    if (this.speedUpPause) return;
+    if (this.speedUpPause || !this.swimming) return;
     this.speed += 50;
     gui.addFood(-1);
 
+    this.speedUpPause = true;
     setTimeout(() => {
       this.speedUpPause = false;
-    }, 200);
+    }, 400);
   }
 
   setInView() {
@@ -100,6 +101,7 @@ class Player extends CollisionObject {
     if (this.carrying) {
       this.carrying.dropoff();
       this.carrying = null;
+      sound.crateCollect.play(0, random(0.8, 1.2), 0.2);
     }
   }
 
@@ -166,6 +168,7 @@ class Player extends CollisionObject {
       for (let fish of scene.fish) {
         if (fish.collides(this)) {
           this.takeDamage(fish.damage);
+          sound.bite.play(0, random(0.8, 1.2), 0.2);
           break;
         }
       }
@@ -192,8 +195,8 @@ class Player extends CollisionObject {
       this.vx = 0;
     }
 
-    if (this.y > 2800) {
-      this.y = 2800;
+    if (this.y > 3300) {
+      this.y = 3300;
       this.vy = 0;
     }
 

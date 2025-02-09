@@ -152,23 +152,23 @@ class GameScene extends Scene {
 
   initObjects() {
     // Crates
-    for (let i = 0; i < 20; i++)
+    for (let i = 0; i < 40; i++)
       spawnRandomCrate(true, GreenCrate);
-    for (let i = 0; i < 20; i++)
+    for (let i = 0; i < 40; i++)
       spawnRandomCrate(true, OrangeCrate);
-    for (let i = 0; i < 10; i++)
+    for (let i = 0; i < 40; i++)
       spawnRandomCrate(true, RedCrate);
 
     // Fish
-    for (let i = 0; i < 5; i++)
+    for (let i = 0; i < 15; i++)
       spawnRandomFish(true, Fish);
-    for (let i = 0; i < 40; i++)
+    for (let i = 0; i < 60; i++)
       spawnRandomFish(true, SmallFish);
-    for (let i = 0; i < 5; i++)
+    for (let i = 0; i < 20; i++)
       spawnRandomFish(true, Shark);
-    for (let i = 0; i < 5; i++)
+    for (let i = 0; i < 15; i++)
       spawnRandomFish(true, Angler);
-    for (let i = 0; i < 10; i++)
+    for (let i = 0; i < 20; i++)
       spawnRandomFish(true, BigFish);
   }
   
@@ -266,7 +266,7 @@ class GameScene extends Scene {
     const WATER_Y = panzoom.yoff * scl + height / 2;
   
     // Draw the sky and background
-    background(0);
+    background(1, 38, 37);
     // background(80, 120, 170);
     // fill(80, 120, 170);
     // noStroke();
@@ -302,7 +302,7 @@ class GameScene extends Scene {
     panzoom.end();
   
     // Draw the ocean water
-    const DARKNESS = constrain(-panzoom.yoff / 1500, 0, 0.8);
+    const DARKNESS = constrain(-panzoom.yoff / 2400, 0, 0.8);
     // fill(0, lerp(2, 0, DARKNESS), lerp(0, 10, DARKNESS), lerp(150, 255, DARKNESS));
     // rect(0, WATER_Y, width, height - WATER_Y);
     background(0, DARKNESS * 255);
@@ -541,21 +541,21 @@ function drawLightArc(x, y, size, startAngle, endAngle, start, stop) {
 function getSpawnRange(Type) {
   switch (Type) {
     case GreenCrate:
-      return [100, 600];
+      return [100, 1200];
     case OrangeCrate:
-      return [600, 1200];
+      return [1200, 2600];
     case RedCrate:
-      return [1200, 1800];
+      return [2600, 3100];
     case Fish:
-      return [1200, 1700];
+      return [1600, 2400];
     case SmallFish:
       return [100, 800];
     case Shark:
-      return [800, 1600];
+      return [800, 2200];
     case Angler:
-      return [1600, 2000];
+      return [2200, 3100];
     case BigFish:
-      return [800, 1600];
+      return [800, 1700];
   }
 }
 
@@ -568,13 +568,13 @@ function getSpawnBiome(Type) {
     case RedCrate:
       return [1, 2];
     case Fish:
-      return [0, 2];
+      return [0, 1, 2];
     case SmallFish:
       return [0];
     case Shark:
       return [0, 1];
     case Angler:
-      return [1, 2];
+      return [0, 1, 2];
     case BigFish:
       return [0, 1];
   }

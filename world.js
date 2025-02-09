@@ -9,7 +9,7 @@ class World {
   }
 
   generateTilemaps() {
-    const sizex = 20;
+    const sizex = 40;
     const sizey = 5;
     const layers = [];
     const biomes = Array(sizex);
@@ -56,6 +56,18 @@ class World {
       layers[0][3][i] = this.getRandomDepth();
     }
 
+    // Depths 3
+    for (let i = 0; i < sizex; i++) {
+      layers[0][4][i] = this.getRandomScaryDepth();
+    }
+
+    // Random islands
+    for (let i = 0; i < sizex; i++) {
+      if (Math.random() < 0.2) {
+        layers[2][0][i] = this.getRandomIsland();
+      }
+    }
+
     // Biomes
     for (let i = 0; i < sizex; i++) {
       const choices = [0, 1, 2];
@@ -97,12 +109,27 @@ class World {
       }
     }
 
+    // Ocean floor
+    for (let i = 0; i < sizex; i++) {
+      layers[2][sizey - 1][i] = 39;
+    }
+
     this.tilemaps = layers;
     this.biomes = biomes;
   }
 
+  getRandomIsland() {
+    const choices = [37, 38];
+    return choices[floor(random(choices.length))];
+  }
+
   getRandomDepth() {
     const choices = [1, 3, 6, 6];
+    return choices[floor(random(choices.length))];
+  }
+
+  getRandomScaryDepth() {
+    const choices = [1, 3, 6];
     return choices[floor(random(choices.length))];
   }
 
@@ -168,6 +195,9 @@ class World {
       case 34: return bg.coral_shelves;
       case 35: return bg.sunken_sub_right;
       case 36: return bg.sunken_sub_left;
+      case 37: return bg.island1;
+      case 38: return bg.island2;
+      case 39: return bg.oceanFloor;
     }
   }
 
@@ -221,10 +251,10 @@ class World {
         const y1 = y * (this.tileH - 1) + yoff;
         image(img, x1, y1);
 
-        if (level == 0 && (x <= 1 || x >= tilemap[y].length - 2)) {
-          fill(0, 0, 0, 100);
-          rect(x1, y1, this.tileW, this.tileH);
-        }
+        // if (level == 0 && (x <= 1 || x >= tilemap[y].length - 2)) {
+        //   fill(0, 0, 0, 100);
+        //   rect(x1, y1, this.tileW, this.tileH);
+        // }
       }
     }
   }

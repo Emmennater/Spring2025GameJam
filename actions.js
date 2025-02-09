@@ -17,6 +17,9 @@ function keyPressed() {
     player.carrying = player.canPickup;
     player.carrying.carry();
     player.canPickup = null;
+
+    if (player.carrying instanceof Crate) sound.boxPickup.play(0, random(0.8, 1.2), 0.3);
+    if (player.carrying instanceof SmallFish) sound.fishPickup.play(0, random(0.8, 1.2), 0.05);
   }
 
   if (KEY == " ") {

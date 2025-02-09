@@ -62,6 +62,20 @@ function preload() {
 
   titlescreen = loadImage('Assets/titlescreen.png');
   gameoverGif = loadImage('Assets/gameover.gif');
+
+  bg.island1 = loadImage('Assets/Background/Island/island_1.png');
+  bg.island2 = loadImage('Assets/Background/Island/island_2.png');
+  
+  bg.oceanFloor = loadImage('Assets/Background/ocean_floor.png');
+
+  // Sounds
+  sound = {};
+  sound.quotaReached = loadSound('Assets/Sound/quota_reached.wav');
+  sound.crateCollect = loadSound('Assets/Sound/crate_collect.wav');
+  sound.bite = loadSound('Assets/Sound/bite.wav');
+  sound.boatNoise = loadSound('Assets/Sound/boat_noise.wav');
+  sound.boxPickup = loadSound('Assets/Sound/box_pickup.wav');
+  sound.fishPickup = loadSound('Assets/Sound/fish_pickup.wav');
 }
 
 function setup() {
@@ -76,6 +90,7 @@ function setup() {
   panzoom.disableRightClickDropDown();
   keys = panzoom.keys;
   mouse = panzoom.mouse;
+  initSounds();
 }
 
 function draw() {
@@ -84,4 +99,11 @@ function draw() {
   panzoom.update(DT);
   scenes.update(DT);
   scenes.draw();
+}
+
+function initSounds() {
+  setTimeout(() => {
+    sound.boatNoise.loop();
+    sound.boatNoise.setVolume(0);
+  }, 100);
 }

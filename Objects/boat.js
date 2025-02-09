@@ -77,6 +77,13 @@ class Boat {
     }
 
     this.flipped = this.vx > 0;
+
+    if (!this.isMoving()) {
+      sound.boatNoise.setVolume(lerp(sound.boatNoise.getVolume(), 0.0, 0.05));
+    }
+    if (this.isMoving()) {
+      sound.boatNoise.setVolume(lerp(sound.boatNoise.getVolume(), 0.2, 0.01));
+    }
   }
   
   draw() {
