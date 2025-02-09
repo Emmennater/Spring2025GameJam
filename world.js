@@ -5,7 +5,7 @@ class World {
     this.tileW = 512;
     this.tileH = 864;
     this.generateTilemaps();
-    this.size = this.tileW * (this.tilemaps[0][0].length - 4) / 2 - this.tileW * 0.3;
+    this.size = this.tileW * (this.tilemaps[0][0].length - 4) / 2;
   }
 
   generateTilemaps() {
@@ -147,7 +147,7 @@ class World {
   }
 
   getBiomeAt(x) {
-    const xoff = (width - (this.tilemaps[0][0].length + 3) * this.tileW) / 2;
+    const xoff = -this.tilemaps[0][0].length * this.tileW * 0.5;
 
     for (let i = 0; i < this.biomes.length; i++) {
       const biome = this.biomes[i];
@@ -163,7 +163,7 @@ class World {
   getRandomBiomeX(biomeIdxs) {
     // Pick random idx
     const biomeIdx = biomeIdxs[floor(random(biomeIdxs.length))];
-    const xoff = (width - (this.tilemaps[0][0].length + 3) * this.tileW) / 2;
+    const xoff = -this.tilemaps[0][0].length * this.tileW * 0.5;
     let sliceIdx = 0;
     let its = 0;
 
@@ -182,9 +182,9 @@ class World {
   }
 
   drawTilemap(tilemap, level = 0) {
-    const xoff = (width - (tilemap[0].length + 3) * this.tileW) / 2;
+    const xoff = -tilemap[0].length * this.tileW * 0.5;
     const yoff = -this.tileH * 1.05;
-
+ 
     imageMode(CORNER);
     rectMode(CORNER);
     for (let y = 0; y < tilemap.length; y++) {
