@@ -17,11 +17,12 @@ class Player extends CollisionObject {
     
     // Clockwise
     this.makeCollisionMesh(
-      [this.w / 2, this.h / 2],
-      [this.w / 2, -this.h / 2],
+      [this.w / 4, this.h / 2],
+      [this.w / 4, -this.h / 2],
       [-this.w / 2, -this.h / 2],
       [-this.w / 2, this.h / 2]
     );
+    this.collisionMesh.setOrigin(0, 0);
   }
   
   reset() {
@@ -237,6 +238,6 @@ class Player extends CollisionObject {
     pop();
 
     // Debug collision mesh
-    // this.drawMesh(window);
+    this.drawMesh(window);
   }
 }

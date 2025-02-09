@@ -83,7 +83,7 @@ class Fish extends CollisionObject {
     pop();
 
     // Debug collision mesh
-    // this.drawMesh(window);
+    this.drawMesh(window);
   }
 }
 
@@ -186,7 +186,7 @@ class BigFish extends SmallFish {
     super(x, y);
     this.sprite = bigFoodGif;
     this.weight = 75;
-    this.food = 60;
+    this.food = 90;
   }
 }
 

@@ -39,7 +39,7 @@ class Resources {
       this.timeSpeed = 1;
     } else {
       this.foodDepletionRate = 0;
-      this.timeSpeed = boat.isMoving() ? 3 : 1;
+      this.timeSpeed = boat.isMoving() ? 5 : 1;
     }
   }
 }

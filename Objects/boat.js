@@ -15,7 +15,7 @@ class Boat {
   }
 
   isMoving() {
-    return Math.abs(this.vx) > 0.1;
+    return Math.abs(this.vx) > 20;
   }
 
   canBoard() {

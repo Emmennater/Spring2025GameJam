@@ -102,7 +102,7 @@ class GUI {
     let sign = ['-', '', '+'][Math.sign(diff) + 1];
 
     if (!force) {
-      this.splashText(`${sign} ${Math.abs(diff).toFixed(0)}`, comp.x + comp.w + 20, comp.y + comp.h / 2, 1, color(255), diff > 0);
+      this.splashText(`${sign} ${Math.abs(diff * 10).toFixed(0)}`, comp.x + comp.w + 20, comp.y + comp.h / 2, 1, color(255), diff > 0);
     }
 
     this.guiComponents.time.setValue(this.resources.time);
