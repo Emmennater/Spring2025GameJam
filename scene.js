@@ -152,11 +152,11 @@ class GameScene extends Scene {
 
   initObjects() {
     // Crates
-    for (let i = 0; i < 40; i++)
+    for (let i = 0; i < 50; i++)
       spawnRandomCrate(true, GreenCrate);
-    for (let i = 0; i < 40; i++)
+    for (let i = 0; i < 50; i++)
       spawnRandomCrate(true, OrangeCrate);
-    for (let i = 0; i < 40; i++)
+    for (let i = 0; i < 50; i++)
       spawnRandomCrate(true, RedCrate);
 
     // Fish
@@ -553,7 +553,7 @@ function getSpawnRange(Type) {
     case OrangeCrate:
       return [1200, 2600];
     case RedCrate:
-      return [2600, 3100];
+      return [2200, 3100];
     case Fish:
       return [1600, 2400];
     case SmallFish:

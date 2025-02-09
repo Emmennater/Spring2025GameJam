@@ -60,7 +60,7 @@ class GreenCrate extends Crate {
     super(x, y);
     this.type = "green";
     this.sprite = greenCrate;
-    this.weight = 50;
+    this.weight = 25;
   }
 
   destroy() {
@@ -76,7 +76,7 @@ class OrangeCrate extends Crate {
     super(x, y);
     this.type = "orange";
     this.sprite = orangeCrate;
-    this.weight = 75;
+    this.weight = 30;
   }
 
   destroy() {
@@ -92,6 +92,7 @@ class RedCrate extends Crate {
     super(x, y);
     this.type = "red";
     this.sprite = redCrate;
+    this.weight = 50;
   }
 
   destroy() {

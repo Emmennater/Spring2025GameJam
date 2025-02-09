@@ -61,7 +61,7 @@ class Player extends CollisionObject {
   speedUp() {
     if (gui.resources.food <= 0) return;
     if (this.speedUpPause || !this.swimming) return;
-    this.speed += 50;
+    this.speed += 75;
     gui.addFood(-1);
 
     this.speedUpPause = true;
@@ -201,10 +201,10 @@ class Player extends CollisionObject {
     }
 
     if (this.swimming) {
-      panzoom.trackZoom(2);
+      panzoom.trackZoom(1.5);
       panzoom.trackPos(this.x, this.y);
     } else {
-      panzoom.trackZoom(1);
+      panzoom.trackZoom(0.8);
       panzoom.trackPos(this.x, this.y - height / 6);
     }
 
