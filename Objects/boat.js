@@ -7,6 +7,7 @@ class Boat {
     this.speed = 300;
     this.boarded = false;
     this.sprite = boatImg;
+    this.flipped = false;
   }
   
   isMoving() {
@@ -39,6 +40,7 @@ class Boat {
   updatePlayerPos() {
     player.x = this.x;
     player.y = this.y - player.w / 2 + 45;
+    player.facing = this.flipped ? 'right' : 'left';
   }
   
   controls(dt) {
@@ -69,15 +71,20 @@ class Boat {
       this.x = -1800;
       this.vx = 0;
     }
+
+    this.flipped = this.vx > 0;
   }
   
   draw() {
     // fill(107, 85, 45);
     // noStroke();
     // arc(this.x, this.y - 20, this.s, this.s * 0.5, 0, PI);
+    const flip = this.flipped ? -1 : 1;
     imageMode(CENTER);
     push();
-    image(this.sprite, this.x, this.y + 15);
+    translate(this.x, this.y);
+    scale(flip, 1);
+    image(this.sprite, 0, 0 + 15);
     pop();
   }
 }
