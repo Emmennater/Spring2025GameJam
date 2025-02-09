@@ -221,11 +221,12 @@ class GameScene extends Scene {
     let earlyColor = color(0, 0, 0, 210);
     let midColor = color(200, 100, 0, 100);
     let lateColor = color(255, 255, 255, 0);
+    let midnight = color(0, 0, 0, 220);
 
     let finalColor = color(0, 0);
 
-    let timeStops = [0, 0.1, 0.3, 0.7, 0.8, 1];
-    let colorStops = [midColor, lateColor, lateColor, lateColor, midColor, earlyColor];
+    let timeStops = [0, 0.1, 0.3, 0.6, 0.7, 0.8, 1];
+    let colorStops = [midColor, lateColor, lateColor, lateColor, midColor, earlyColor, midnight];
 
     for (let i = 0; i < timeStops.length - 1; i++) {
       if (t >= timeStops[i] && t < timeStops[i + 1]) {
@@ -281,7 +282,7 @@ class GameScene extends Scene {
     const focus = panzoom.unscaleCoordinate(player.x, player.y);
     const scl = panzoom.zoom;
     const WATER_Y = panzoom.yoff * scl + height / 2;
-    const RADIAL_W = 300 * scl;
+    const RADIAL_W = 400 * scl;
   
     // Draw the sky and background
     this.drawBackground();
@@ -324,8 +325,8 @@ class GameScene extends Scene {
     ctx.globalCompositeOperation = "lighter"; 
   
     // Draw the flash light gradient if the player is low enough
-    if (player.y > 500) {
-      const V = 0.5;
+    if (player.y > 500 || (this.timeFade > 0.8 && player.swimming)) {
+      const V = 0.6;
       const DIR_ANGLE = player.facing == 'left' ? PI + player.tilt + 0.3 : -player.tilt - 0.3;
       const LEN = PI/6;
       // drawLightArc(
