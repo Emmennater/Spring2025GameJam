@@ -174,6 +174,7 @@ class GameScene extends Scene {
   
   init() {
     this.reset();
+    this.world.generateTilemaps();
     boat.board();
     player.setInView();
     this.initObjects();

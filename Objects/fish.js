@@ -51,7 +51,13 @@ class Fish extends CollisionObject {
       this.wander();
     }
     
-    this.angle = lerpAngle(this.angle, this.targetAngle, 0.1);
+    const aDiff = angleDiff(this.angle, this.targetAngle);
+    if (Math.abs(aDiff) == PI) {
+      this.angle = this.targetAngle;
+    } else {
+      this.angle = lerpAngle(this.angle, this.targetAngle, 0.1);
+    }
+
     this.vx = cos(this.angle) * this.vel;
     this.vy = sin(this.angle) * this.vel;
     this.x += this.vx * dt;
