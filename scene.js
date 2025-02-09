@@ -282,7 +282,7 @@ class GameScene extends Scene {
     const focus = panzoom.unscaleCoordinate(player.x, player.y);
     const scl = panzoom.zoom;
     const WATER_Y = panzoom.yoff * scl + height / 2;
-    const RADIAL_W = 400 * scl;
+    const RADIAL_W = 350 * scl;
   
     // Draw the sky and background
     this.drawBackground();
