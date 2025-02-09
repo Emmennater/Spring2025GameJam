@@ -82,7 +82,7 @@ class Boat {
       sound.boatNoise.setVolume(lerp(sound.boatNoise.getVolume(), 0.0, 0.05));
     }
     if (this.isMoving()) {
-      sound.boatNoise.setVolume(lerp(sound.boatNoise.getVolume(), 0.2, 0.01));
+      sound.boatNoise.setVolume(lerp(sound.boatNoise.getVolume(), 0.1, 0.01));
     }
   }
   
