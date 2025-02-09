@@ -83,7 +83,7 @@ class Fish extends CollisionObject {
     pop();
 
     // Debug collision mesh
-    this.drawMesh(window);
+    // this.drawMesh(window);
   }
 }
 
