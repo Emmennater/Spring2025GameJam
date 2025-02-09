@@ -10,7 +10,7 @@ class World {
 
   generateTilemaps() {
     const sizex = 16;
-    const sizey = 4;
+    const sizey = 5;
     const layers = [];
 
     // Initialize
