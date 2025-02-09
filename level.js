@@ -17,6 +17,7 @@ class Level {
     this.level += 1;
     this.score += 25;
     sound.quotaReached.play(0, 1, 0.2);
+    gui.addHealth(50);
   }
 
   gameOver() {
