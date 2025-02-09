@@ -14,8 +14,9 @@ class Carriable extends CollisionObject {
   }
 
   drop() {
-    this.x = this.carrier.x;
-    this.y = this.carrier.y;
+    const [x, y] = this.carrier.getHoldPos();
+    this.x = x;
+    this.y = y;
     this.carrier = null;
     this.updateMesh(this.x, this.y, 0);
   }

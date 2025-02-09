@@ -10,14 +10,18 @@ class Boat {
     this.flipped = false;
   }
   
+  reset() {
+    this.x = 0;
+  }
+
   isMoving() {
-    return Math.abs(this.vx) > 0.1;
+    return Math.abs(this.vx) > 20;
   }
 
   canBoard() {
-    const DIST_TO_BOAT = dist(player.x, player.y, this.x, this.y);
+    const DIST_TO_BOAT = Math.sqrt((player.x - this.x) ** 2 + ((player.y - this.y) ** 2) * 2);
     
-    return DIST_TO_BOAT < 100 && player.swimming;
+    return DIST_TO_BOAT < 150 && player.swimming;
   }
 
   dismount() {
@@ -62,13 +66,13 @@ class Boat {
       this.updatePlayerPos();
     }
 
-    if (this.x > 1800) {
-      this.x = 1800;
+    if (this.x > scene.world.size - 100) {
+      this.x = scene.world.size - 100;
       this.vx = 0;
     }
 
-    if (this.x < -1800) {
-      this.x = -1800;
+    if (this.x < -scene.world.size + 100) {
+      this.x = -scene.world.size + 100;
       this.vx = 0;
     }
 

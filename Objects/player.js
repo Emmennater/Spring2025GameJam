@@ -17,11 +17,12 @@ class Player extends CollisionObject {
     
     // Clockwise
     this.makeCollisionMesh(
-      [this.w / 2, this.h / 2],
-      [this.w / 2, -this.h / 2],
+      [this.w / 4, this.h / 2],
+      [this.w / 4, -this.h / 2],
       [-this.w / 2, -this.h / 2],
       [-this.w / 2, this.h / 2]
     );
+    this.collisionMesh.setOrigin(0, 0);
   }
   
   reset() {
@@ -69,7 +70,7 @@ class Player extends CollisionObject {
   }
 
   setInView() {
-    panzoom.setInView(this.x, this.y - height / 3);
+    panzoom.setInView(this.x, this.y - height / 8);
   }
 
   pickups() {
@@ -107,6 +108,20 @@ class Player extends CollisionObject {
       this.carrying.drop();
       this.carrying = null;
     }
+  }
+
+  getHoldPos() {
+    if (!this.carrying) return [this.x, this.y];
+
+    let flip = this.facing === 'left' ? -1 : 1;
+    let w = this.w * 0.35;
+    let h = this.h * 0.2;
+
+    // Account for rotation (this.tilt) about center (this.x, this.y)
+    let x = this.x + (cos(this.tilt) * this.w * 0.38) * flip;
+    let y = this.y - sin(this.tilt) * this.h * 0.6 + this.h * 0.2;
+    
+    return [x, y];
   }
 
   controls(dt) {
@@ -167,13 +182,13 @@ class Player extends CollisionObject {
     this.x += this.vx * speedMult * dt;
     this.y += this.vy * speedMult * dt;
 
-    if (this.x > 2000) {
-      this.x = 2000;
+    if (this.x > scene.world.size) {
+      this.x = scene.world.size;
       this.vx = 0;
     }
 
-    if (this.x < -2000) {
-      this.x = -2000;
+    if (this.x < -scene.world.size) {
+      this.x = -scene.world.size;
       this.vx = 0;
     }
 
@@ -211,7 +226,11 @@ class Player extends CollisionObject {
     
     if (this.swimming) {
       rotate(this.tilt);
-      image(scoobaSwimGif, 0, 0);
+      if (this.carrying) {
+        image(swimArmsDownGif, 0, 0);
+      } else {
+        image(scoobaSwimGif, 0, 0);
+      }
     } else {
       image(walkCycleGif, 0, 0);
     }

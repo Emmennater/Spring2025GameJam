@@ -6,21 +6,25 @@ class Resources {
     this.health = 0;
     this.time = 0;
     this.quota = 25;
-    this.maxTime = 100;
+    this.maxTime = 96;
     this.foodDepletionRate = 1;
     this.drainFood = true;
     this.parent = parent;
     this.timeSpeed = 1;
-    this.difficulty = 2;
+    this.difficulty = 0.5;
 
     setInterval(() => {
+      if (scenes.scene.paused) return;
       if (this.drainFood) {
         gui.addFood(-this.foodDepletionRate);
       }
       if (this.food == 0) {
         gui.addHealth(-5);
       }
-      gui.addTime(this.timeSpeed * this.difficulty, 1);
+      if (this.food > 100 && this.health < 100) {
+        gui.addHealth(1);
+      }
+      gui.addTime(this.timeSpeed * this.difficulty);
     }, 3000);
   }
 
@@ -35,7 +39,7 @@ class Resources {
       this.timeSpeed = 1;
     } else {
       this.foodDepletionRate = 0;
-      this.timeSpeed = boat.isMoving() ? 3 : 1;
+      this.timeSpeed = boat.isMoving() ? 5 : 1;
     }
   }
 }

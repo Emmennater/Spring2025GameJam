@@ -1,7 +1,7 @@
 
 class PanZoom {
   constructor() {
-    this.zoom = 0.5;
+    this.zoom = 1;
     this.xoff = 0;
     this.yoff = 0;
     this.gap = 50;
@@ -9,7 +9,7 @@ class PanZoom {
     this.pmouse = { x: 0, y: 0 };
     this.keys = {};
     this.zoomToMouse = false;
-    this.debug = false;
+    this.debug = true;
     this.ignoreInput = 0;
     this.initEvents();
   }

@@ -10,3 +10,13 @@ function setBrightness(c, amount) {
     blue(c) * amount
   );
 }
+
+function angleDiff(a, b) {
+  let delta = ((b - a + PI) % TWO_PI + TWO_PI) % TWO_PI - PI; // Find shortest path
+  return delta;
+}
+
+function lerpAngle(a, b, t) {
+  let delta = ((b - a + PI) % TWO_PI + TWO_PI) % TWO_PI - PI; // Find shortest path
+  return a + delta * t;
+}

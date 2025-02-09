@@ -4,6 +4,7 @@ class Fish extends CollisionObject {
     super(x, y, w, h);
     this.sprite = monsterFish1Gif;
     this.angle = 0;
+    this.targetAngle = 0;
     this.speed = 100;
     this.vel = 0;
     this.vx = 0;
@@ -21,7 +22,7 @@ class Fish extends CollisionObject {
   }
 
   followPlayer() {
-    this.angle = atan2(player.y - this.y, player.x - this.x);
+    this.targetAngle = atan2(player.y - this.y, player.x - this.x);
     this.vel = this.speed;
   }
 
@@ -29,15 +30,15 @@ class Fish extends CollisionObject {
     const [ylow, yhigh] = getSpawnRange(this.constructor);
 
     if (this.y < ylow) {
-      this.angle = PI / 2;
+      this.targetAngle = PI / 2;
       this.vel = this.speed / 2;
     } else if (this.y > yhigh) {
-      this.angle = -PI / 2;
+      this.targetAngle = -PI / 2;
       this.vel = this.speed / 2;
     } else {
       const vx = (noise(frameCount / 100 + this.toff) - 0.5) * 100;
       this.vel = Math.abs(vx);
-      this.angle = vx > 0 ? 0 : PI;
+      this.targetAngle = vx > 0 ? 0 : PI;
     }
   }
 
@@ -50,6 +51,13 @@ class Fish extends CollisionObject {
       this.wander();
     }
     
+    const aDiff = angleDiff(this.angle, this.targetAngle);
+    if (Math.abs(aDiff) == PI) {
+      this.angle = this.targetAngle;
+    } else {
+      this.angle = lerpAngle(this.angle, this.targetAngle, 0.1);
+    }
+
     this.vx = cos(this.angle) * this.vel;
     this.vy = sin(this.angle) * this.vel;
     this.x += this.vx * dt;
@@ -82,7 +90,7 @@ class Fish extends CollisionObject {
 class Shark extends Fish {
   constructor(x, y) {
     super(x, y, 100, 50);
-    this.speed = 100;
+    this.speed = 50;
     this.sprite = sharkGif;
     this.damage = 10;
   }
@@ -106,9 +114,10 @@ class SmallFish extends Carriable {
     this.vel = 0;
     this.vx = 0;
     this.vy = 0;
+    this.flipSprite = false;
     this.flipped = false;
     this.toff = random(-100, 100);
-    this.weight = 50;
+    this.weight = 25;
     this.food = 30;
   }
 
@@ -152,8 +161,7 @@ class SmallFish extends Carriable {
     let y = this.y;
 
     if (this.carrier) {
-      x = this.carrier.x;
-      y = this.carrier.y;
+      [x, y] = this.carrier.getHoldPos();
     }
 
     imageMode(CENTER);
@@ -178,7 +186,7 @@ class BigFish extends SmallFish {
     super(x, y);
     this.sprite = bigFoodGif;
     this.weight = 75;
-    this.food = 60;
+    this.food = 90;
   }
 }
 
@@ -187,12 +195,14 @@ function getRandomFish(init = false, type = null) {
   const randomIndex = Math.floor(Math.random() * types.length);
   const FishType = type ? type : types[randomIndex];
   const [ylow, yhigh] = getSpawnRange(FishType);
-  let x = random(-scene.world.size, scene.world.size);
+
+  // let x = random(-scene.world.size, scene.world.size);
+  let x = scene.world.getRandomBiomeX(getSpawnBiome(FishType));
   let y = random(ylow, yhigh);
   let closest = getNearestFish(x, y);
   let i = 0;
   
-  while (closest.distance < 200 && (!init && dist(player.x, player.y, x, y) > 1000)) {
+  while (closest.distance < 100 && (!init && dist(player.x, player.y, x, y) > 3000)) {
     x = random(-scene.world.size, scene.world.size);
     y = random(ylow, yhigh);
     closest = getNearestFish(x, y);

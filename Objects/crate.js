@@ -44,7 +44,8 @@ class Crate extends Carriable {
     imageMode(CENTER);
     
     if (this.carrier) {
-      image(this.sprite, this.carrier.x, this.carrier.y);
+      const [x, y] = this.carrier.getHoldPos();
+      image(this.sprite, x, y);
     } else {
       image(this.sprite, this.x, this.y);
     }
@@ -64,7 +65,7 @@ class GreenCrate extends Crate {
 
   destroy() {
     super.destroy();
-    const loot = this.getRandomLoot({ coin: 0.3, food: 0.5, trash: 0.2 }, 1, 1);
+    const loot = this.getRandomLoot({ coin: 0.3, food: 0.5, trash: 0.2 }, 1, 2);
     gui.addMoney(loot.coin * 10);
     gui.addFood(loot.food * 10);
   }
@@ -95,7 +96,7 @@ class RedCrate extends Crate {
 
   destroy() {
     super.destroy();
-    const loot = this.getRandomLoot({ coin: 0.5, food: 0.2, trash: 0.3 }, 4, 6);
+    const loot = this.getRandomLoot({ coin: 0.5, food: 0.2, trash: 0.1 }, 4, 6);
     gui.addMoney(loot.coin * 10);
     gui.addFood(loot.food * 10);
   }
@@ -107,12 +108,13 @@ function getRandomCrate(init = false, type = null) {
   const CrateType = type ? type : types[randomIndex];
   const [ylow, yhigh] = getSpawnRange(CrateType);
 
-  let x = random(-scene.world.size, scene.world.size);
+  let x = scene.world.getRandomBiomeX(getSpawnBiome(CrateType));
+  // let x = random(-scene.world.size, scene.world.size);
   let y = random(ylow, yhigh);
   let closest = getNearestCrate(x, y);
   let i = 0;
   
-  while (closest.distance < 200 && (!init && dist(player.x, player.y, x, y) > 1000)) {
+  while (closest.distance < 100 && (!init && dist(player.x, player.y, x, y) > 3000)) {
     x = random(-scene.world.size, scene.world.size);
     y = random(ylow, yhigh);
     closest = getNearestCrate(x, y);
