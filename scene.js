@@ -211,10 +211,10 @@ class GameScene extends Scene {
 
   getDaytimeFilter() {
     let t = gui.resources.time / gui.resources.maxTime;
+    let diff = t - this.timeFade;
+    if (diff > 0.1) this.timeFade = t;
     this.timeFade = lerp(this.timeFade, t, 0.002);
     t = this.timeFade;
-
-    print(t);
 
     let earlyColor = color(0, 0, 0, 210);
     let midColor = color(200, 100, 0, 100);
