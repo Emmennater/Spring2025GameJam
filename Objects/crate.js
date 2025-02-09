@@ -92,7 +92,7 @@ class RedCrate extends Crate {
     super(x, y);
     this.type = "red";
     this.sprite = redCrate;
-    this.weight = 50;
+    this.weight = 75;
   }
 
   destroy() {
