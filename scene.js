@@ -252,7 +252,12 @@ class GameOverScene extends Scene {
   }
 
   draw() {
-    image(gameoverGif, 0, 0, width, height);
+    background(0);
+    const ASPECT = gameoverGif.width / gameoverGif.height;
+    const w = height * ASPECT;
+    const x = (width - w) / 2;
+    image(gameoverGif, x, 0, w, height);
+    
     fill(255, 100 + (sin(frameCount * 0.1) + 1) / 2 * 155);
     textAlign(CENTER);
     textSize(30);

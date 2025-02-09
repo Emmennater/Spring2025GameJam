@@ -7,7 +7,7 @@ class GUI {
     this.guiComponents.level = new Text("Level");
     this.guiComponents.time = new ClockMeter("Time", 0, 100, color(200));
     this.guiComponents.money = new Meter("Quota", 0, 25, color(110, 230, 110));
-    this.guiComponents.food = new Meter("Food", 0, 100);
+    this.guiComponents.food = new Meter("Food", 0, 200);
     this.guiComponents.health = new Meter("Health", 0, 100, color(230, 110, 110));
     this.reset();
   }
@@ -32,7 +32,7 @@ class GUI {
 
   addFood(diff, force = false) {
     const oldFood = this.resources.food;
-    this.resources.food = constrain(this.resources.food + diff, 0, 100);
+    this.resources.food = constrain(this.resources.food + diff, 0, 200);
     diff = this.resources.food - oldFood;
 
     if (diff == 0 && !force) return;
@@ -227,8 +227,8 @@ class Meter extends GUIComponent {
 class ClockMeter extends Meter {
   constructor(label, min, max, col = color(110, 170, 230)) {
     super(label, min, max, col);
-    this.startTime = new Date("2023-02-08T07:23:19"); // Sunrise
-    this.endTime = new Date("2023-02-08T20:23:19"); // Sunset
+    this.startTime = new Date("2023-02-08T06:00:00"); // Sunrise
+    this.endTime = new Date("2023-02-08T22:30:00"); // Sunset
   }
 
   draw(x, y, w, h) {

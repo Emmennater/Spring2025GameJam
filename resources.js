@@ -6,6 +6,7 @@ class Resources {
     this.health = 0;
     this.time = 0;
     this.quota = 25;
+    this.maxTime = 100;
     this.foodDepletionRate = 1;
     this.drainFood = true;
     this.parent = parent;
@@ -27,13 +28,13 @@ class Resources {
     const IS_MOVING = player.vx != 0 || player.vy != 0;
 
     if (IS_MOVING) {
-      this.foodDepletionRate = 4;
-      this.timeSpeed = 1;
-    } else if (player.swimming) {
       this.foodDepletionRate = 2;
       this.timeSpeed = 1;
-    } else {
+    } else if (player.swimming) {
       this.foodDepletionRate = 1;
+      this.timeSpeed = 1;
+    } else {
+      this.foodDepletionRate = 0;
       this.timeSpeed = boat.isMoving() ? 3 : 1;
     }
   }
