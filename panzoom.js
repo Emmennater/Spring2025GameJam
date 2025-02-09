@@ -9,6 +9,7 @@ class PanZoom {
     this.pmouse = { x: 0, y: 0 };
     this.keys = {};
     this.zoomToMouse = false;
+    this.debug = true;
     this.ignoreInput = 0;
     this.initEvents();
   }
@@ -25,6 +26,7 @@ class PanZoom {
   }
 
   trackZoom(zoom) {
+    if (this.debug) return;
     this.zoom = lerp(this.zoom, zoom, 0.1);
   }
   
@@ -50,16 +52,18 @@ class PanZoom {
       this.keys[k] = false;
     });
     
-    // document.addEventListener("wheel", e => {
-    //   const ZOOM_RATE = 0.1;
-    //   if (e.deltaY < 0) {
-    //     this.zoomIn(0.5);
-    //     // this.zoomIn(-e.deltaY / 100 * ZOOM_RATE)
-    //   } else {
-    //     this.zoomOut(0.5);
-    //     // this.zoomOut(e.deltaY / 100 * ZOOM_RATE)
-    //   }
-    // });
+    if (this.debug) {
+      document.addEventListener("wheel", e => {
+        const ZOOM_RATE = 0.1;
+        if (e.deltaY < 0) {
+          this.zoomIn(0.5);
+          // this.zoomIn(-e.deltaY / 100 * ZOOM_RATE)
+        } else {
+          this.zoomOut(0.5);
+          // this.zoomOut(e.deltaY / 100 * ZOOM_RATE)
+        }
+      });
+    }
   }
   
   disableRightClickDropDown() {

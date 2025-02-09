@@ -5,10 +5,12 @@ class Resources {
     this.food = 0;
     this.health = 0;
     this.time = 0;
+    this.quota = 25;
     this.foodDepletionRate = 1;
     this.drainFood = true;
     this.parent = parent;
     this.timeSpeed = 1;
+    this.difficulty = 2;
 
     setInterval(() => {
       if (this.drainFood) {
@@ -17,7 +19,7 @@ class Resources {
       if (this.food == 0) {
         gui.addHealth(-5);
       }
-      gui.addTime(this.timeSpeed, 1);
+      gui.addTime(this.timeSpeed * this.difficulty, 1);
     }, 3000);
   }
 
@@ -32,7 +34,7 @@ class Resources {
       this.timeSpeed = 1;
     } else {
       this.foodDepletionRate = 1;
-      this.timeSpeed = 5;
+      this.timeSpeed = boat.isMoving() ? 3 : 1;
     }
   }
 }

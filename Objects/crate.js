@@ -1,9 +1,11 @@
 
-class Crate extends CollisionObject {
+class Crate extends Carriable {
   constructor(x, y) {
     super(x, y, 35, 35);
     this.t = random(0, 2 * Math.PI);
     this.period = random(0.5, 2);
+    this.carrier = null;
+    this.weight = 100;
 
     this.makeCollisionMesh(
       [this.w / 2, this.h / 2],
@@ -11,6 +13,22 @@ class Crate extends CollisionObject {
       [-this.w / 2, -this.h / 2],
       [-this.w / 2, this.h / 2]
     );
+  }
+
+  getRandomLoot(probabilities, minItems, maxItems) {
+    const itemCount = Math.floor(Math.random() * (maxItems - minItems + 1)) + minItems;
+    let loot = { coin: 0, food: 0 };
+    
+    for (let i = 0; i < itemCount; i++) {
+      const roll = Math.random();
+      if (roll < probabilities.coin) {
+        loot.coin += 1;
+      } else if (roll < probabilities.coin + probabilities.food) {
+        loot.food += 1;
+      } // Otherwise, it's trash (nothing is added)
+    }
+
+    return loot;
   }
 
   update(dt) {
@@ -23,7 +41,13 @@ class Crate extends CollisionObject {
   }
 
   draw() {
-    image(this.sprite, this.x, this.y);
+    imageMode(CENTER);
+    
+    if (this.carrier) {
+      image(this.sprite, this.carrier.x, this.carrier.y);
+    } else {
+      image(this.sprite, this.x, this.y);
+    }
 
     // Debug
     // this.drawMesh(window);
@@ -35,11 +59,14 @@ class GreenCrate extends Crate {
     super(x, y);
     this.type = "green";
     this.sprite = greenCrate;
+    this.weight = 50;
   }
 
   destroy() {
     super.destroy();
-    gui.addMoney(10);
+    const loot = this.getRandomLoot({ coin: 0.3, food: 0.5, trash: 0.2 }, 1, 1);
+    gui.addMoney(loot.coin * 10);
+    gui.addFood(loot.food * 10);
   }
 }
 
@@ -48,11 +75,14 @@ class OrangeCrate extends Crate {
     super(x, y);
     this.type = "orange";
     this.sprite = orangeCrate;
+    this.weight = 75;
   }
 
   destroy() {
     super.destroy();
-    gui.addFood(10);
+    const loot = this.getRandomLoot({ coin: 0.4, food: 0.35, trash: 0.25 }, 2, 3);
+    gui.addMoney(loot.coin * 10);
+    gui.addFood(loot.food * 10);
   }
 }
 
@@ -65,31 +95,35 @@ class RedCrate extends Crate {
 
   destroy() {
     super.destroy();
-    gui.addHealth(10);
+    const loot = this.getRandomLoot({ coin: 0.5, food: 0.2, trash: 0.3 }, 4, 6);
+    gui.addMoney(loot.coin * 10);
+    gui.addFood(loot.food * 10);
   }
 }
 
 function getRandomCrate(init = false, type = null) {
   const types = [GreenCrate, OrangeCrate, RedCrate];
   const randomIndex = Math.floor(Math.random() * types.length);
-  let x = random(-1200, 1200);
-  let y = random(100, 1200);
+  const CrateType = type ? type : types[randomIndex];
+  const [ylow, yhigh] = getSpawnRange(CrateType);
+
+  let x = random(-scene.world.size, scene.world.size);
+  let y = random(ylow, yhigh);
   let closest = getNearestCrate(x, y);
   let i = 0;
   
   while (closest.distance < 200 && (!init && dist(player.x, player.y, x, y) > 1000)) {
-    x = random(-1000, 1000);
-    y = random(100, 800);
+    x = random(-scene.world.size, scene.world.size);
+    y = random(ylow, yhigh);
     closest = getNearestCrate(x, y);
     if (i++ > 40) { break; }
   }
 
-  const CrateType = type ? type : types[randomIndex];
   return new CrateType(x, y);
 }
 
-function spawnRandomCrate() {
-  const crate = getRandomCrate();
+function spawnRandomCrate(init = false, type = null) {
+  const crate = getRandomCrate(init, type);
   scene.addCrate(crate);
 }
 

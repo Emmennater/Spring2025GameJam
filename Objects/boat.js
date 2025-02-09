@@ -4,10 +4,15 @@ class Boat {
     this.y = y;
     this.vx = 0;
     this.s = 300;
-    this.speed = 200;
+    this.speed = 300;
     this.boarded = false;
+    this.sprite = boatImg;
   }
   
+  isMoving() {
+    return Math.abs(this.vx) > 0.1;
+  }
+
   canBoard() {
     const DIST_TO_BOAT = dist(player.x, player.y, this.x, this.y);
     
@@ -25,15 +30,15 @@ class Boat {
   board() {
     this.updatePlayerPos();
     player.swimming = false;
-    player.facing = 'right';
+    player.facing = 'left';
     scoobaSwimGif.pause();
     scoobaSwimGif.setFrame(1);
     this.boarded = true;
   }
   
   updatePlayerPos() {
-    player.x = this.x - 50;
-    player.y = this.y - player.w / 2 - 15;
+    player.x = this.x;
+    player.y = this.y - player.w / 2 + 45;
   }
   
   controls(dt) {
@@ -42,7 +47,7 @@ class Boat {
       if (keys.A) targetSpeedX -= this.speed;
       if (keys.D) targetSpeedX += this.speed;
     }
-    this.vx = lerp(this.vx, targetSpeedX, 0.05);
+    this.vx = lerp(this.vx, targetSpeedX, 0.025);
   }
   
   update(dt) {
@@ -67,8 +72,12 @@ class Boat {
   }
   
   draw() {
-    fill(107, 85, 45);
-    noStroke();
-    arc(this.x, this.y - 20, this.s, this.s * 0.5, 0, PI);
+    // fill(107, 85, 45);
+    // noStroke();
+    // arc(this.x, this.y - 20, this.s, this.s * 0.5, 0, PI);
+    imageMode(CENTER);
+    push();
+    image(this.sprite, this.x, this.y + 15);
+    pop();
   }
 }

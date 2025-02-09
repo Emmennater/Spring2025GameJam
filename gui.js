@@ -4,13 +4,20 @@ class GUI {
     this.guiComponents = {};
     this.splashTexts = [];
     this.resources = new Resources(this);
-    this.guiComponents.money = new Text("Money");
-    this.guiComponents.time = new Meter("Time", 0, 100, color(255));
+    this.guiComponents.level = new Text("Level");
+    this.guiComponents.time = new ClockMeter("Time", 0, 100, color(200));
+    this.guiComponents.money = new Meter("Quota", 0, 25, color(110, 230, 110));
     this.guiComponents.food = new Meter("Food", 0, 100);
     this.guiComponents.health = new Meter("Health", 0, 100, color(230, 110, 110));
-    this.addFood(80, true);
-    this.addMoney(100, true);
-    this.addHealth(100, true);
+    this.reset();
+  }
+
+  reset() {
+    this.guiComponents.money.max = 25;
+    this.addFood(-this.resources.food + 80, true);
+    this.addHealth(-this.resources.health + 100, true);
+    this.addMoney(-this.resources.money, true);
+    this.addTime(-this.resources.time, true);
   }
 
   splashText(...args) {
@@ -29,10 +36,10 @@ class GUI {
     diff = this.resources.food - oldFood;
 
     if (diff == 0 && !force) return;
-    
+
     let comp = this.guiComponents.food;
     let sign = ['-', '', '+'][Math.sign(diff) + 1];
-    
+
     if (!force) {
       this.splashText(`${sign} ${Math.abs(diff)}`, comp.x + comp.w + 20, comp.y + comp.h / 2, 1, color(255), diff > 0);
     }
@@ -41,52 +48,62 @@ class GUI {
   }
 
   addMoney(diff, force = false) {
+    const MAX = Infinity
     const oldMoney = this.resources.money;
-    this.resources.money = constrain(this.resources.money + diff, 0, Infinity);
+    this.resources.money = constrain(this.resources.money + diff, 0, MAX);
     diff = this.resources.money - oldMoney;
 
     if (diff == 0 && !force) return;
-    
+
     let comp = this.guiComponents.money;
     let sign = ['-', '', '+'][Math.sign(diff) + 1];
-    
+
     if (!force) {
-      this.splashText(`${sign} $${Math.abs(diff).toFixed(2)}`, comp.x + comp.w + 40, comp.y + comp.h / 2, 1, color(255), diff > 0);
+      this.splashText(`${sign} ${Math.abs(diff).toFixed(0)}`, comp.x + comp.w + 40, comp.y + comp.h / 2, 1, color(255), diff > 0);
     }
-    
-    this.guiComponents.money.setValue(`$${this.resources.money.toFixed(2)}`);
+
+    this.guiComponents.money.setValue(this.resources.money);
   }
 
   addHealth(diff, force = false) {
+    const MAX = this.guiComponents.health.max;
     const oldHealth = this.resources.health;
-    this.resources.health = constrain(this.resources.health + diff, 0, 100);
+    this.resources.health = constrain(this.resources.health + diff, 0, MAX);
     diff = this.resources.health - oldHealth;
 
     if (diff == 0 && !force) return;
-    
+
     let comp = this.guiComponents.health;
     let sign = ['-', '', '+'][Math.sign(diff) + 1];
-    
+
     if (!force) {
       const c = diff > 0 ? color(110, 230, 110) : color(230, 110, 110);
       this.splashText(`${sign} ${Math.abs(diff)}`, comp.x + comp.w + 20, comp.y + comp.h / 2, 1, c, diff > 0);
     }
-    
+
     this.guiComponents.health.setValue(this.resources.health);
   }
 
   addTime(diff, force = false) {
+    const MAX = this.guiComponents.time.max;
     const oldTime = this.resources.time;
-    this.resources.time = constrain(this.resources.time + diff, 0, 100);
+    this.resources.time = constrain(this.resources.time + diff, 0, MAX);
     diff = this.resources.time - oldTime;
 
     if (diff == 0 && !force) return;
-    
+
     this.guiComponents.time.setValue(this.resources.time);
+  }
+
+  addQuota(diff) {
+    this.resources.quota += diff;
+    this.guiComponents.money.max += diff;
   }
 
   update(dt) {
     this.resources.update(dt);
+
+    this.guiComponents.level.setValue(`Level ${scene.level.level}`);
 
     // Update splash texts
     for (let i = 0; i < this.splashTexts.length; i++) {
@@ -94,18 +111,24 @@ class GUI {
     }
   }
 
-  draw() {    
+  draw() {
     const FONT_SIZE = 40;
-    
+
     fill(255, 200);
     noStroke();
     textAlign(CENTER, CENTER);
     textSize(FONT_SIZE);
-    
+
     if (boat.canBoard()) {
-      text("Press E to board", width / 2, FONT_SIZE * 0.8);
+      if (player.carrying) {
+        text("Press E to drop off", width / 2, FONT_SIZE * 0.8);
+      } else {
+        text("Press E to board", width / 2, FONT_SIZE * 0.8);
+      }
     } else if (!player.swimming) {
       text("Press E to dismount", width / 2, FONT_SIZE * 0.8);
+    } else if (player.canPickupMessage) {
+      text(player.canPickupMessage, width / 2, FONT_SIZE * 0.8);
     }
 
     // Draw meters
@@ -187,17 +210,61 @@ class Meter extends GUIComponent {
     // Draw background
     fill(setAlpha(setBrightness(this.col, 0.3), 200));
     rect(x, y, w, h);
-    
+
     // Draw value
     fill(this.col);
     rect(x, y, w * ((this.val - this.min) / (this.max - this.min)), h);
-  
+
     // Draw label
     fill(255);
     noStroke();
     textSize(20);
     textAlign(CENTER, CENTER);
-    text(`${this.val.toFixed(0)} ${this.label}`, x + w / 2, y + h / 2);
+    text(`${this.val.toFixed(0)} / ${this.max.toFixed(0)} ${this.label}`, x + w / 2, y + h / 2);
+  }
+}
+
+class ClockMeter extends Meter {
+  constructor(label, min, max, col = color(110, 170, 230)) {
+    super(label, min, max, col);
+    this.startTime = new Date("2023-02-08T07:23:19"); // Sunrise
+    this.endTime = new Date("2023-02-08T20:23:19"); // Sunset
+  }
+
+  draw(x, y, w, h) {
+    // Draw background
+    fill(setAlpha(setBrightness(this.col, 0.3), 200));
+    rect(x, y, w, h);
+
+    // Draw value
+    fill(this.col);
+    rect(x, y, w * ((this.val - this.min) / (this.max - this.min)), h);
+
+    // Draw label
+    fill(255);
+    noStroke();
+    textSize(20);
+    textAlign(CENTER, CENTER);
+
+    // Correct interpolation of time
+    let elapsed = this.endTime.getTime() - this.startTime.getTime();
+    let timePassed = this.startTime.getTime() + elapsed * (this.val / this.max);
+    let time = new Date(timePassed);
+
+    // Extract time components correctly
+    let hours = time.getHours();
+    let minutes = time.getMinutes();
+    let seconds = time.getSeconds();
+    let ampm = hours >= 12 ? "PM" : "AM";
+
+    hours = hours % 12;
+    hours = hours ? hours : 12; // Convert 0 to 12
+    minutes = minutes.toString().padStart(2, "0");
+    seconds = seconds.toString().padStart(2, "0");
+
+    let strTime = hours + ":" + minutes + " " + ampm;
+    text(strTime, x + w / 2, y + h / 2);
+
   }
 }
 
